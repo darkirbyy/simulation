@@ -15,12 +15,12 @@ framework:
 
     form:
         csrf_protection:
-            token_id: symfo-base/submit
+            token_id: simulation/submit
 
     csrf_protection:
         check_header: true
         stateless_token_ids:
-            - symfo-base/submit
+            - simulation/submit
 
 when@test:
     framework:
