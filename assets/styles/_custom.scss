@@ -35,155 +35,16 @@ legend.col-form-label.required::after {
   z-index: 10 !important;
 }
 
-///////////////////////////////////
-// Tomselect improvements /////////
-///////////////////////////////////
+// Home ///////////////////////////
 
-.ts-wrapper.single .ts-control,
-.ts-wrapper.single .ts-control input {
-  cursor: text !important;
-}
+.home-link {
+  filter: brightness(90%);
 
-.ts-control .item {
-  display: inline !important;
-}
-
-///////////////////////////////////
-// App-specific classes ///////////
-///////////////////////////////////
-
-// Avatars ////////////////////////
-@mixin app-avatar($size) {
-  object-fit: cover;
-  object-position: center;
-  height: $size * $font-size-base;
-  width: $size * $font-size-base;
-  box-shadow: $box-shadow-sm !important;
-  border-radius: 50% !important;
-}
-
-.app-avatar-navbar {
-  @include app-avatar(1.5);
-}
-
-.app-avatar-card {
-  @include app-avatar(1.5);
-}
-
-// Dropdown ///////////////////////
-.app-dropdown-smooth {
-  &::before {
-    transition: transform 0.2s ease-in-out;
-    transform: rotate(-90deg);
+  &:hover {
+    filter: brightness(110%);
+    box-shadow: 0 0 1rem 0.1rem var(--app-home-card-bg-color-hover);
+    outline: none;
   }
-
-  &::after {
-    transition: transform 0.2s ease-in-out;
-    transform: rotate(90deg);
-  }
-
-  &[aria-expanded='true']::before,
-  .link-secondary:hover &[aria-expanded='true']::after {
-    transform: rotate(0deg);
-  }
-}
-
-.app-dropdown-left {
-  &::after {
-    display: none;
-  }
-
-  &::before {
-    display: inline-block;
-    margin-right: $caret-spacing;
-    vertical-align: $caret-vertical-align;
-    content: '';
-    @include caret-down;
-  }
-}
-
-// Cover image ///////////////////////////
-
-@mixin app-card-img-missing($size) {
-  font-size: $size;
-  opacity: 0.25;
-  align-content: center;
-}
-
-.app-card-img-missing-index {
-  @include app-card-img-missing(4rem);
-}
-
-.app-card-img-missing-search {
-  @include app-card-img-missing(2rem);
-
-  border: solid 1px black;
-}
-
-.app-card-img-fit {
-  width: 100%;
-  aspect-ratio: 460 / 215;
-}
-
-// Form ///////////////////////////
-
-.app-form-row {
-  margin-bottom: ($spacer * 1) !important;
-}
-
-.app-form-range-tick {
-  --thickness: 2px;
-  --height: 30%;
-  --color: #{$form-range-track-bg};
-
-  display: inline-block;
-  background: linear-gradient(
-      to right,
-      var(--color) var(--thickness),
-      transparent 1px
-    )
-    repeat-x;
-  background-size: calc(
-      100% / ((var(--max) - var(--min)) / var(--step)) - 0.45%
-    )
-    var(--height);
-  background-position: 1.5% bottom;
-  position: relative;
-}
-
-// todo : display in and max ?
-// .range::before, .range::after {
-//   font: 12px monospace;
-//   content: counter(x);
-//   position: absolute;
-//   bottom: -2ch;
-// }
-
-// .range::before {
-//   counter-reset: x var(--min);
-//   transform: translateX(-50%);
-// }
-
-// .range::after {
-//   counter-reset: x var(--max);
-//   right: 0;
-//   transform: translateX(50%);
-// }
-
-.app-no-border-bottom {
-  transition: border-radius 0.3s ease-in-out;
-
-  &[aria-expanded='false'] {
-    border-bottom: none !important;
-  }
-}
-
-.app-btn-border-light {
-  border-color: var(--bs-border-color) !important;
-}
-
-.app-rating-display {
-  width: 5rem !important;
 }
 
 // Others /////////////////////////

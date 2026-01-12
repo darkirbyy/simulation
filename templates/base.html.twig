@@ -81,19 +81,24 @@
         </div>
       </nav>
       {# Main title #}
-      <div class="container-fluid text-center py-2">
+      <div class="container-fluid text-center py-4">
         <h1>{{ title }}</h1>
       </div>
     </header>
 
     {# The MAIN block must be redefined on each page, including the flash block with the bood wrapper #}
     <main class="flex-grow-1" role="main" id="main-content">
-      {% block main %}
-        {{ block('flash', 'theme/flash.html.twig') }}
-        <div class="text-center">
-          Some content !
+      <section>
+        <div class="container">
+          {# Redefine the flashes with the same width as the cards #}
+          <div class="mx-auto card-max-large card-max-md-none">
+            {{ block('flash', 'theme/flash.html.twig') }}
+          </div>
+          {% block main %}
+            Some content !
+          {% endblock %}
         </div>
-      {% endblock %}
+      </section>
     </main>
 
     {# The FOOTER divided in two part : left/right on large screen / on the top of each other on small screen #}
