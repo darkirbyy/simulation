@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% set title = 'Erreur ' ~ code %}
+
+{% block main %}
+  <section>
+    <div class="container">
+      <p class="text-center fs-4">
+        Une erreur {{ code }} est survenue.
+      </p>
+      <p class="text-center">
+        <a href="{{ path('necesse_index') }}" class="btn btn-outline-primary">Retour à l'accueil</a>
+      </p>
+    </div>
+  </section>
+{% endblock %}

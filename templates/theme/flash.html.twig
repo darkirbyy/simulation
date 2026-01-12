@@ -1,0 +1,41 @@
+{# A flash message MUST be an array with a mandatory key `message` (string)
+  and an optional key `params` (array, default to empty) #}
+
+{# This block SHOULD be inserted on every page, at the top of the first section.
+  4 types of flashes: info, success, warning, danger #}
+{% block flash %}
+  <div aria-live="polite">
+    {% for flash in app.flashes('simulation/info') %}
+      <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <div class="bi bi-info-square-fill">
+          {{ flash.message|raw }}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+    {% for flash in app.flashes('simulation/success') %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="bi bi-check-circle-fill">
+          {{ flash.message|raw }}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+    {% for flash in app.flashes('simulation/warning') %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="bi bi-exclamation-triangle-fill">
+          {{ flash.message|raw }}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+    {% for flash in app.flashes('simulation/danger') %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="bi bi-x-square-fill">
+          {{ flash.message|raw }}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

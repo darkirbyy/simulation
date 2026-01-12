@@ -46,7 +46,7 @@ To lint all files, run `composer lint-all`.
 After this first install or cloning the existing project:
 
 - install the dependencies with `composer install` and `npm install`.
-- copy the `.env.dev` file into a `.env.dev.local` file and customize the values.  
+- copy the `.env` file into a `.env.local` file and customize the values.  
 :information_source: `DATABASE_URL` is not mandatory for dev environment as Symfony will get the correct values from docker.  
 - start the php/web server along with docker and npm server with `symfony server:start -d`.
 - execute `symfony console doctrine:migrations:migrate`.
