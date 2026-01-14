@@ -1,0 +1,165 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Tests\Unit\Service\Home;
+
+use App\Dto\Home\FlashMessage;
+use App\Service\Home\ExceptionManager;
+use App\Service\Home\FormManager;
+use Doctrine\DBAL\Exception\ConstraintViolationException;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes as PU;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+
+#[PU\AllowMockObjectsWithoutExpectations]
+final class FormManagerTest extends TestCase
+{
+    private $driverException;
+    private $request;
+    private $session;
+    private $game;
+    private $form;
+
+    private $entityManager;
+    private $requestStack;
+    private $csrfTokenManager;
+    private $exceptionManager;
+
+    private $formManager;
+
+    public function setUp(): void
+    {
+        $fakeDriver = new class extends \Exception implements \Doctrine\DBAL\Driver\Exception {
+            public function getSQLState(): ?string
+            {
+                return null;
+            }
+        };
+        $this->driverException = new DriverException($fakeDriver, null);
+        $this->request = new Request(content: '{"_token":"tokenValue"}');
+        $this->session = new Session(new MockArraySessionStorage());
+        $this->game = new class {};
+        $this->form = $this->createMock(FormInterface::class);
+
+        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->csrfTokenManager = $this->createMock(CsrfTokenManagerInterface::class);
+        $this->exceptionManager = $this->createMock(ExceptionManager::class);
+
+        $this->requestStack->expects($this->once())->method('getSession')->willReturn($this->session);
+
+        $this->formManager = new FormManager($this->entityManager, $this->requestStack, $this->csrfTokenManager, $this->exceptionManager);
+    }
+
+    #[PU\Test]
+    #[PU\DataProvider('validateAndPersistValidValues')]
+    public function validateAndPersistValid(bool $isSubmitted, bool $isValid): void
+    {
+        $this->form->expects($this->once())->method('isSubmitted')->willReturn($isSubmitted);
+        $this->form->expects($this->any())->method('isValid')->willReturn($isValid);
+
+        $this->assertSame($isSubmitted && $isValid, $this->formManager->validateAndPersist($this->form, $this->game, null));
+    }
+
+    #[PU\Test]
+    public function checkTokenAndRemoveValid(): void
+    {
+        $this->requestStack->expects($this->once())->method('getCurrentRequest')->willReturn($this->request);
+        $this->csrfTokenManager->expects($this->once())->method('isTokenValid')->willReturn(true);
+
+        $this->assertTrue($this->formManager->checkTokenAndRemove('tokenId', $this->game, null));
+    }
+
+    #[PU\Test]
+    public function checkTokenAndRemoveInvalid(): void
+    {
+        $this->requestStack->expects($this->once())->method('getCurrentRequest')->willReturn($this->request);
+        $this->csrfTokenManager->expects($this->once())->method('isTokenValid')->willReturn(false);
+
+        $this->assertFalse($this->formManager->checkTokenAndRemove('tokenId', $this->game, null));
+    }
+
+    #[PU\Test]
+    public function persitValidWithFlash(): void
+    {
+        $successMessage = 'success';
+
+        $this->entityManager->expects($this->once())->method('persist')->with($this->game);
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->assertTrue($this->formManager->persist($this->game, new FlashMessage($successMessage)));
+    }
+
+    #[PU\Test]
+    public function persitValidWithoutFlash(): void
+    {
+        $this->entityManager->expects($this->once())->method('persist')->with($this->game);
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->assertTrue($this->formManager->persist($this->game));
+    }
+
+    #[PU\Test]
+    public function persitInvalid(): void
+    {
+        $this->entityManager->expects($this->once())->method('persist')->with($this->game);
+        $this->entityManager
+            ->expects($this->once())
+            ->method('flush')
+            ->willThrowException(new ConstraintViolationException($this->driverException, null));
+        $this->exceptionManager->expects($this->once())->method('handleDatabase');
+
+        $this->assertFalse($this->formManager->persist($this->game));
+    }
+
+    #[PU\Test]
+    public function removeValidWithFlash(): void
+    {
+        $successMessage = 'success';
+
+        $this->entityManager->expects($this->once())->method('remove')->with($this->game);
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->assertTrue($this->formManager->remove($this->game, new FlashMessage($successMessage)));
+    }
+
+    #[PU\Test]
+    public function removeValidWithoutFlash(): void
+    {
+        $this->entityManager->expects($this->once())->method('remove')->with($this->game);
+        $this->entityManager->expects($this->once())->method('flush');
+
+        $this->assertTrue($this->formManager->remove($this->game));
+    }
+
+    #[PU\Test]
+    public function removeInvalid(): void
+    {
+        $this->entityManager->expects($this->once())->method('remove')->with($this->game);
+        $this->entityManager
+            ->expects($this->once())
+            ->method('flush')
+            ->willThrowException(new ConstraintViolationException($this->driverException, null));
+        $this->exceptionManager->expects($this->once())->method('handleDatabase');
+
+        $this->assertFalse($this->formManager->remove($this->game));
+    }
+
+    public static function validateAndPersistValidValues(): array
+    {
+        return [
+            'both true' => [true, true],
+            'valid false' => [true, false],
+            'submitted false' => [false, true],
+            'both false' => [false, false],
+        ];
+    }
+}

@@ -3,5 +3,8 @@
 {% set title = 'Accueil' %}
 
 {% block main %}
-  Choisir une option :
+  Choisir une option :<ul>
+    <li><a href="{{ path('necesse_world_index') }}">Gérer les mondes</a></li>
+    <li><a href="{{ path('necesse_world_index') }}">Lancer une simulation</a></li>
+  </ul>
 {% endblock %}

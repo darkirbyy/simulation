@@ -1,0 +1,9 @@
+{# Macro to create a backlink #}
+{% macro backlink(path) %}
+  <div class="mb-2">
+    <a class="link-secondary icon-link icon-link-hover icon-link-left" href="{{ path }}">
+      <span class="bi bi-arrow-left mb-1" aria-hidden="true"></span>
+      Retour
+    </a>
+  </div>
+{% endmacro %}

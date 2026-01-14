@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Necesse;
 
-use App\Enum\ReplaceModeEnum;
+use App\Enum\Necesse\ReplaceModeEnum;
 use App\Repository\Necesse\WorldRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
