@@ -55,6 +55,9 @@ class WorldType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
+                'row_attr' => [
+                    'class' => 'text-end',
+                ],
             ]);
     }
 

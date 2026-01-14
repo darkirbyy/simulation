@@ -24,14 +24,14 @@ class RunType extends AbstractType
                 'class' => World::class,
                 'choice_label' => 'label',
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('time', IntegerType::class, [
                 'label' => 'Durée (en secondes)',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('seed', IntegerType::class, [
@@ -39,47 +39,50 @@ class RunType extends AbstractType
                 'label_html' => true,
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('initialHen', IntegerType::class, [
                 'label' => 'Poules',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('initialRooster', IntegerType::class, [
                 'label' => 'Coqs',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('limitHen', IntegerType::class, [
                 'label' => 'Poules',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('limitRooster', IntegerType::class, [
                 'label' => 'Coqs',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
             ->add('limitNest', IntegerType::class, [
                 'label' => 'Nids',
                 'required' => true,
                 'row_attr' => [
-                    'class' => 'app-necesse-w-33 ',
+                    'class' => 'app-necesse-w-33',
                 ],
             ])
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Lancer la simulation',
+                'row_attr' => [
+                    'class' => 'text-end',
+                ],
             ]);
     }
 

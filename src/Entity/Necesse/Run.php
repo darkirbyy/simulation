@@ -57,7 +57,7 @@ class Run
     #[Assert\GreaterThanOrEqual(1)]
     private ?int $time = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::BIGINT)]
     #[Assert\NotBlank]
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $seed = null;

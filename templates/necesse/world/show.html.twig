@@ -7,10 +7,11 @@
 {% block main %}
   {{ m.backlink(path('necesse_world_index')) }}
 
+  <h4 class="mt-2 mb-0">Paramètres</h4>
   <table class="mt-2 table table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col">Paramètre</th>
+        <th scope="col">Nom</th>
         <th scope="col" colspan="2">Valeur / Intervalle</th>
       </tr>
     </thead>
@@ -47,6 +48,26 @@
         <td>Mode de remplacement quand un coq/une poule doit être tué(e)</td>
         <td colspan="2">{{ world.replaceMode|trans }}</td>
       </tr>
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-0">Simulations</h4>
+  <table class="mt-2 table table-striped table-hover">
+    <thead>
+      <tr>
+        <th class="align-center" scope="col">Date</th>
+        <th class="align-center" scope="col">Temps d'exécution</th>
+        <th class="w-1 text-nowrap text-end align-center" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for run in world.runs %}
+        <tr>
+          <td>{{ run.date|format_datetime('medium', 'medium') }}</td>
+          <td>{{ display_seconds(run.duration) }}</td>
+          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_run_show', { id: run.id })) }}</td>
+        </tr>
+      {% endfor %}
     </tbody>
   </table>
 

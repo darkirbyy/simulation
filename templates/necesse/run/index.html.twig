@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
+{% from 'necesse/macro.html.twig' import display_seconds %}
 
 {% set title = 'Gestions des simulations' %}
 
@@ -23,7 +24,7 @@
         <tr>
           <td class="py-2">{{ run.world.label }}</td>
           <td class="py-2">{{ run.date|format_datetime('medium', 'medium') }}</td>
-          <td class="py-2">{{ run.duration }}s</td>
+          <td class="py-2">{{ display_seconds(run.duration) }}</td>
           <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_run_show', { id: run.id })) }}</td>
         </tr>
       {% endfor %}

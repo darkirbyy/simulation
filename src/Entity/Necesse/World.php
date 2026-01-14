@@ -58,7 +58,7 @@ class World
     /**
      * @var Collection<int, Run>
      */
-    #[ORM\OneToMany(targetEntity: Run::class, mappedBy: 'world', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Run::class, mappedBy: 'world', orphanRemoval: true, cascade: ['remove'])]
     private Collection $runs;
 
     // /////////////////////////////////////////////////////
