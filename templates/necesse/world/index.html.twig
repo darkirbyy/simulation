@@ -6,4 +6,23 @@
 {% block main %}
   {{ m.backlink(path('necesse_index')) }}
   {{ m.add_button(path('necesse_world_new'), 'Ajouter un monde') }}
+
+  {# Table displaying all objects #}
+  <table class="mt-2 table table-striped table-hover">
+    {# Table header #}
+    <thead>
+      <tr>
+        <th class="align-center" scope="col">Libellé</th>
+        <th class="w-1 text-nowrap text-end align-center" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for world in worlds %}
+        <tr>
+          <td class="py-2">{{ world.label }}</td>
+          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_world_show', { id: world.id })) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

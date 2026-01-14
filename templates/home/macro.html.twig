@@ -2,18 +2,26 @@
 {% macro backlink(path) %}
   <div class="mb-2">
     <a class="link-secondary icon-link icon-link-hover icon-link-left" href="{{ path }}">
-      <span class="bi bi-arrow-left mb-1" aria-hidden="true"></span>
+      <span class="bi bi-arrow-left mb-1"></span>
       Retour
     </a>
   </div>
 {% endmacro %}
 
-{# Macro to create a backlink #}
+{# Macro to create an add button #}
 {% macro add_button(path, text) %}
   <div class="mb-2">
     <a class="btn btn-primary" href="{{ path }}">
-      <span class="bi bi-plus-square-fill me-md-1" aria-hidden="true"></span>
+      <span class="bi bi-plus-square-fill me-md-1"></span>
       {{ text|default('Ajouter') }}
     </a>
   </div>
+{% endmacro %}
+
+{# Macro to create a show button #}
+{% macro show_button(path, text) %}
+  <a href="{{ path }}" class="btn btn-sm btn-outline-secondary">
+    <span class="bi bi-eye"></span>
+    Voir
+  </a>
 {% endmacro %}

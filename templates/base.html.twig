@@ -44,9 +44,9 @@
 
     {# The HEADER regroup the navbar and the main title #}
     <header>
-      <nav class="navbar navbar-expand-md bg-body-secondary" aria-label="Navigation principale">
+      <nav class="navbar navbar-expand-md bg-body-secondary">
         {% set currentRoute = app.current_route %}
-        {% set activeLink = 'class="nav-link active" aria-current="page" aria-selected="true"' %}
+        {% set activeLink = 'class="nav-link active"' %}
         {% set otherLink = 'class="nav-link"' %}
         {# Navbar with 3 blocks : the brand, the navigation button for small screen and the content #}
         <div class="container-fluid">
@@ -56,17 +56,7 @@
             Simulation
           </span>
           {# Navigation button for small screen #}
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbar-supported-content"
-            aria-controls="navbar-supported-content"
-            aria-expanded="false"
-            aria-label="Basculer la navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-supported-content"><span class="navbar-toggler-icon"></span></button>
           {# Content as two lists : one on the left, the other on the right for lage screen / both on the top of each other for small screen #}
           <div class="collapse navbar-collapse" id="navbar-supported-content">
             {# Left part of the navbar #}
@@ -102,16 +92,16 @@
     </main>
 
     {# The FOOTER divided in two part : left/right on large screen / on the top of each other on small screen #}
-    <footer role="contentinfo" aria-label="Pied-de-page">
+    <footer role="contentinfo">
       <div class="container-fluid fw-light bg-body-secondary small mt-4 py-2">
         <div class="row gw-md-4">
           {# Left part : references to frameworks #}
           <div class="col-12 col-md-6 text-center text-md-end">
             Réalisé avec
-            <span class="fa-brands fa-symfony" aria-hidden="true"></span>
+            <span class="fa-brands fa-symfony"></span>
             <span class="fst-italic">Symfony 7</span>
             <span class="mx-1">|</span>
-            <span class="fa-brands fa-bootstrap" aria-hidden="true"></span>
+            <span class="fa-brands fa-bootstrap"></span>
             <span class="fst-italic">Bootstrap 5</span>
           </div>
           {# Right part : version and update of the app #}

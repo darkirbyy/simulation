@@ -28,19 +28,19 @@ class WorldType extends AbstractType
                 'required' => true,
             ])
             ->add('chickToChicken', MinMaxType::class, [
-                'label' => "Temps pour qu'un oeuf se transforme en poussin (en secondes)",
+                'label' => "Temps pour qu'un poussin se transforme en poulet (en secondes)",
                 'required' => true,
             ])
             ->add('henToLay', MinMaxType::class, [
-                'label' => "Temps pour qu'un oeuf se transforme en poussin (en secondes)",
+                'label' => "Temps pour qu'une poule ponde un oeuf (en secondes)",
                 'required' => true,
             ])
             ->add('roosterToFertilize', MinMaxType::class, [
-                'label' => "Temps pour qu'un oeuf se transforme en poussin (en secondes)",
+                'label' => "Temps pour qu'un coq fertilise une poule (en secondes)",
                 'required' => true,
             ])
             ->add('eggToFemale', NumberType::class, [
-                'label' => "Propabilité qu'un oeuf donne une femelle (entre 0 et 1)",
+                'label' => "Probabilité qu'un oeuf donne une femelle (entre 0 et 1)",
                 'required' => true,
             ])
             ->add('replaceMode', EnumType::class, [

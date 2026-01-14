@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 #[Route('/necesse/world', name: 'necesse_world_')]
 class WorldController extends AbstractController
@@ -41,9 +42,17 @@ class WorldController extends AbstractController
             return $this->redirectToRoute('necesse_world_index');
         }
 
-        return $this->render('necesse/world/edit.html.twig', [
+        return $this->render('necesse/world/new.html.twig', [
             'world' => $world,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    public function show(World $world): Response
+    {
+        return $this->render('necesse/world/show.html.twig', [
+            'world' => $world,
         ]);
     }
 }
