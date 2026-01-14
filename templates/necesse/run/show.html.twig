@@ -1,64 +1,93 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-
-{% macro display_minutes(minutes) %}
-  {{- ((minutes / 60)|round(0, 'floor')) ~ 'min ' ~ minutes % 60 ~ 's' -}}
-{% endmacro %}
+{% from 'necesse/macro.html.twig' import display_seconds %}
 
 {% set title = "Détails d'une simulation" %}
 
 {% block main %}
-  {{ m.backlink(path('necesse_world_index')) }}
+  {{ m.backlink(path('necesse_run_index')) }}
 
-  <table class="mt-2 table table-striped table-hover">
+  <h4 class="mt-2 mb-0">Paramètres</h4>
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col">Paramètre</th>
-        <th scope="col" colspan="2">Valeur / Intervalle</th>
+        <th class="fw-bold" colspan="2">Paramètres globaux</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
       <tr>
-        <td>Libellé</td>
-        <td colspan="2">{{ world.label }}</td>
+        <td>Monde</td>
+        <td>
+          {{ run.world.label }}
+          {{ m.show_button(path('necesse_world_show', { id: run.world.id })) }}
+        </td>
       </tr>
       <tr>
-        <td>Temps pour qu'un oeuf se transforme en poussin</td>
-        <td>{{ _self.display_minutes(world.eggToChick.min) }}</td>
-        <td>{{ _self.display_minutes(world.eggToChick.max) }}</td>
+        <td>Temps</td>
+        <td>{{ display_seconds(run.time) }}</td>
       </tr>
       <tr>
-        <td>Temps pour qu'un poussin se transforme en poulet</td>
-        <td>{{ _self.display_minutes(world.chickToChicken.min) }}</td>
-        <td>{{ _self.display_minutes(world.chickToChicken.max) }}</td>
+        <td>Graine</td>
+        <td>{{ run.seed }}</td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th class="fw-bold" colspan="2">Paramètres initiaux</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        <td>Poules</td>
+        <td>{{ run.initialHen }}</td>
       </tr>
       <tr>
-        <td>Temps pour qu'une poule ponde un oeuf</td>
-        <td>{{ _self.display_minutes(world.henToLay.min) }}</td>
-        <td>{{ _self.display_minutes(world.henToLay.max) }}</td>
+        <td>Coqs</td>
+        <td>{{ run.initialRooster }}</td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th class="fw-bold" colspan="2">Paramètres limites</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        <td>Poules</td>
+        <td>{{ run.limitHen }}</td>
       </tr>
       <tr>
-        <td>Temps pour qu'un coq fertilise une poule</td>
-        <td>{{ _self.display_minutes(world.roosterToFertilize.min) }}</td>
-        <td>{{ _self.display_minutes(world.roosterToFertilize.max) }}</td>
+        <td>Coqs</td>
+        <td>{{ run.limitRooster }}</td>
       </tr>
       <tr>
-        <td>Probabilité qu'un oeuf donne une femelle</td>
-        <td colspan="2">{{ world.eggToFemale * 100 }}%</td>
-      </tr>
-      <tr>
-        <td>Mode de remplacement quand un coq/une poule doit être tué(e)</td>
-        <td colspan="2">{{ world.replaceMode|trans }}</td>
+        <td>Nids</td>
+        <td>{{ run.limitNest }}</td>
       </tr>
     </tbody>
   </table>
 
-  {{ m.delete_button('delete-world', 'Supprimer ce monde') }}
-  {{
-    m.delete_modale(
-      'delete-world',
-      path('necesse_world_delete', { id: world.id }),
-      'Attention, cela supprimera ce monde et <strong>toutes les simulations</strong> réalisées dedans.',
-    )
-  }}
+  <h4 class="mt-5 mb-0">Exécution</h4>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col" colspan="2">Valeurs</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        <td>Date d'exécution</td>
+        <td>{{ run.date|format_datetime('medium', 'medium') }}</td>
+      </tr>
+      <tr>
+        <td>Temps d'exécution</td>
+        <td>{{ display_seconds(run.duration) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 class="mt-5 mb-0">Résultats</h4>
+
+  {{ m.delete_button('delete-run', 'Supprimer cette simulation') }}
+  {{ m.delete_modale('delete-run', path('necesse_run_delete', { id: run.id }), 'Attention, cela supprimera <strong> toutes les données</strong> de la simulation.') }}
 {% endblock %}

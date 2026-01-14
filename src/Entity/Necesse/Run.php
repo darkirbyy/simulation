@@ -25,7 +25,7 @@ class Run
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
-    private ?int $duration = null;
+    private ?float $duration = null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
@@ -108,12 +108,12 @@ class Run
         return $this;
     }
 
-    public function getDuration(): ?int
+    public function getDuration(): ?float
     {
         return $this->duration;
     }
 
-    public function setDuration(?int $duration): static
+    public function setDuration(?float $duration): static
     {
         $this->duration = $duration;
 

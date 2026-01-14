@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-
-{% macro display_minutes(minutes) %}
-  {{- ((minutes / 60)|round(0, 'floor')) ~ 'min ' ~ minutes % 60 ~ 's' -}}
-{% endmacro %}
+{% from 'necesse/macro.html.twig' import display_seconds %}
 
 {% set title = "Détails d'un monde" %}
 
@@ -24,23 +21,23 @@
       </tr>
       <tr>
         <td>Temps pour qu'un oeuf se transforme en poussin</td>
-        <td>{{ _self.display_minutes(world.eggToChick.min) }}</td>
-        <td>{{ _self.display_minutes(world.eggToChick.max) }}</td>
+        <td>{{ display_seconds(world.eggToChick.min) }}</td>
+        <td>{{ display_seconds(world.eggToChick.max) }}</td>
       </tr>
       <tr>
         <td>Temps pour qu'un poussin se transforme en poulet</td>
-        <td>{{ _self.display_minutes(world.chickToChicken.min) }}</td>
-        <td>{{ _self.display_minutes(world.chickToChicken.max) }}</td>
+        <td>{{ display_seconds(world.chickToChicken.min) }}</td>
+        <td>{{ display_seconds(world.chickToChicken.max) }}</td>
       </tr>
       <tr>
         <td>Temps pour qu'une poule ponde un oeuf</td>
-        <td>{{ _self.display_minutes(world.henToLay.min) }}</td>
-        <td>{{ _self.display_minutes(world.henToLay.max) }}</td>
+        <td>{{ display_seconds(world.henToLay.min) }}</td>
+        <td>{{ display_seconds(world.henToLay.max) }}</td>
       </tr>
       <tr>
         <td>Temps pour qu'un coq fertilise une poule</td>
-        <td>{{ _self.display_minutes(world.roosterToFertilize.min) }}</td>
-        <td>{{ _self.display_minutes(world.roosterToFertilize.max) }}</td>
+        <td>{{ display_seconds(world.roosterToFertilize.min) }}</td>
+        <td>{{ display_seconds(world.roosterToFertilize.max) }}</td>
       </tr>
       <tr>
         <td>Probabilité qu'un oeuf donne une femelle</td>
