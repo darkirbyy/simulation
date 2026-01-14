@@ -1,5 +1,6 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    form_themes: ['home/form.html.twig']
     file_name_pattern: '*.twig'
     globals: 
         env:

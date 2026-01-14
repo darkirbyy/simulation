@@ -7,6 +7,7 @@ namespace App\Controller\Necesse;
 use App\Dto\Home\FlashMessage;
 use App\Entity\Necesse\World;
 use App\Form\Necesse\WorldType;
+use App\Repository\Necesse\WorldRepository;
 use App\Service\Home\FormManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +18,21 @@ use Symfony\Component\Routing\Attribute\Route;
 class WorldController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(WorldRepository $worldRepo): Response
     {
-        return $this->render('necesse/world/index.html.twig', []);
+        $worlds = $worldRepo->findAll();
+
+        return $this->render('necesse/world/index.html.twig', [
+            'worlds' => $worlds,
+        ]);
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, FormManager $fm): Response
     {
         $world = new World();
+        $world->setDefaults();
+
         $form = $this->createForm(WorldType::class, $world);
         $form->handleRequest($request);
 

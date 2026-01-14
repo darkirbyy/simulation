@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
 
-{% set title = 'Paramétrage des mondes' %}
+{% set title = 'Gestions des mondes' %}
 
 {% block main %}
   {{ m.backlink(path('necesse_index')) }}
+  {{ m.add_button(path('necesse_world_new'), 'Ajouter un monde') }}
 {% endblock %}

@@ -51,12 +51,29 @@ class World
     #[Assert\NotBlank]
     private ?ReplaceModeEnum $replaceMode = null;
 
+    // /////////////////////////////////////////////////////
+    // Custom methods and validation constraints ///////////
+    // /////////////////////////////////////////////////////
+
     public function __construct()
     {
         $this->eggToChick = new MinMax();
         $this->chickToChicken = new MinMax();
         $this->henToLay = new MinMax();
         $this->roosterToFertilize = new MinMax();
+    }
+
+    public function setDefaults(): static
+    {
+        $this->label = 'Mon Monde 1';
+        $this->eggToChick->setDefaults();
+        $this->chickToChicken->setDefaults();
+        $this->henToLay->setDefaults();
+        $this->roosterToFertilize->setDefaults();
+        $this->eggToFemale = 0.5;
+        $this->replaceMode = ReplaceModeEnum::Random;
+
+        return $this;
     }
 
     // /////////////////////////////////////////////////////

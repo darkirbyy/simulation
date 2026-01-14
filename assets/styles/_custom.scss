@@ -8,6 +8,11 @@
   margin-bottom: 0 !important;
 }
 
+.col-form-label {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .help-text {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
@@ -17,8 +22,7 @@
   margin-top: ($spacer * 0) !important;
 }
 
-label.form-label.required::after,
-legend.col-form-label.required::after {
+label.form-label.required::after {
   content: ' *';
   color: $primary !important;
 }
@@ -31,13 +35,13 @@ legend.col-form-label.required::after {
   --bs-icon-link-transform: translateX(-0.2rem);
 }
 
-:not(.modal) .popover {
-  z-index: 10 !important;
-}
+///////////////////////////////////
+// App-specific classes ///////////
+///////////////////////////////////
 
 // Home ///////////////////////////
 
-.home-link {
+.app-home-link {
   filter: brightness(90%);
 
   &:hover {

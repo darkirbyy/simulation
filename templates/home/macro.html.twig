@@ -7,3 +7,13 @@
     </a>
   </div>
 {% endmacro %}
+
+{# Macro to create a backlink #}
+{% macro add_button(path, text) %}
+  <div class="mb-2">
+    <a class="btn btn-primary" href="{{ path }}">
+      <span class="bi bi-plus-square-fill me-md-1" aria-hidden="true"></span>
+      {{ text|default('Ajouter') }}
+    </a>
+  </div>
+{% endmacro %}
