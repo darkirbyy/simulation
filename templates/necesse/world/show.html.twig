@@ -52,4 +52,13 @@
       </tr>
     </tbody>
   </table>
+
+  {{ m.delete_button('delete-world', 'Supprimer ce monde') }}
+  {{
+    m.delete_modale(
+      'delete-world',
+      path('necesse_world_delete', { id: world.id }),
+      'Attention, cela supprimera ce monde et <strong>toutes les simulations</strong> réalisées dedans.',
+    )
+  }}
 {% endblock %}

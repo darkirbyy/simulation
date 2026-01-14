@@ -55,4 +55,15 @@ class WorldController extends AbstractController
             'world' => $world,
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => Requirement::DIGITS])]
+    public function delete(World $world, FormManager $fm): Response
+    {
+        $flashSuccess = new FlashMessage('Le monde a été supprimé avec succès.');
+        if ($fm->checkTokenAndRemove('simulation/delete', $world, $flashSuccess)) {
+            return $this->redirectToRoute('necesse_world_index');
+        }
+
+        return $this->redirectToRoute('necesse_world_show', ['id' => $world->getId()]);
+    }
 }
