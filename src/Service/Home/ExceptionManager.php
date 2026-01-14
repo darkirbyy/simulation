@@ -33,7 +33,7 @@ class ExceptionManager
         if ($exception instanceof ForeignKeyConstraintViolationException) {
             $message = "Impossible de supprimer cet élément tant que d'autres éléments y font référence.";
         } elseif ($exception instanceof NotNullConstraintViolationException) {
-            $message = "mpossible d'ajouter ou de modifier cet élément car certains champs requis sont vides.";
+            $message = "Impossible d'ajouter ou de modifier cet élément car certains champs requis sont vides.";
         } elseif ($exception instanceof UniqueConstraintViolationException) {
             $message = "Impossible d'ajouter ou de modifier cet élément car certains champs doivent être uniques.";
         } else {
