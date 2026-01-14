@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% import 'home/macro.html.twig' as m %}
+
+{% set title = 'Gestions des simulations' %}
+
+{% block main %}
+  {{ m.backlink(path('necesse_index')) }}
+  {{ m.add_button(path('necesse_run_new'), 'Lancer une nouvelle simulation') }}
+
+  {# Table displaying all objects #}
+  <table class="mt-2 table table-striped table-hover">
+    {# Table header #}
+    <thead>
+      <tr>
+        <th class="align-center" scope="col">Monde</th>
+        <th class="align-center" scope="col">Date</th>
+        <th class="align-center" scope="col">Temps d'éxecution</th>
+        <th class="w-1 text-nowrap text-end align-center" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for run in runs %}
+        <tr>
+          <td class="py-2">{{ run.world.label }}</td>
+          <td class="py-2">{{ run.date|format_datetime('medium', 'medium') }}</td>
+          <td class="py-2">{{ run.duration }}s</td>
+          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_run_show', { id: run.id })) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

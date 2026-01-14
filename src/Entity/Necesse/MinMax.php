@@ -45,7 +45,7 @@ class MinMax
         return $this->min;
     }
 
-    public function setMin(int $min): static
+    public function setMin(?int $min): static
     {
         $this->min = $min;
 
@@ -57,7 +57,7 @@ class MinMax
         return $this->max;
     }
 
-    public function setMax(int $max): static
+    public function setMax(?int $max): static
     {
         $this->max = $max;
 

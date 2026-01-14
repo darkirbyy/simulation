@@ -5,5 +5,7 @@
 
 {% block main %}
   {{ m.backlink(path('necesse_world_index')) }}
-  {{ form(form) }}
+  {{ form_start(form) }}
+  {{ form_rest(form) }}
+  {{ form_end(form) }}
 {% endblock %}

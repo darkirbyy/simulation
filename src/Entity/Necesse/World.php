@@ -6,6 +6,8 @@ namespace App\Entity\Necesse;
 
 use App\Enum\Necesse\ReplaceModeEnum;
 use App\Repository\Necesse\WorldRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,6 +53,12 @@ class World
     #[Assert\NotBlank]
     private ?ReplaceModeEnum $replaceMode = null;
 
+    /**
+     * @var Collection<int, Run>
+     */
+    #[ORM\OneToMany(targetEntity: Run::class, mappedBy: 'world', orphanRemoval: true)]
+    private Collection $runs;
+
     // /////////////////////////////////////////////////////
     // Custom methods and validation constraints ///////////
     // /////////////////////////////////////////////////////
@@ -61,6 +69,7 @@ class World
         $this->chickToChicken = new MinMax();
         $this->henToLay = new MinMax();
         $this->roosterToFertilize = new MinMax();
+        $this->runs = new ArrayCollection();
     }
 
     public function setDefaults(): static
@@ -150,7 +159,7 @@ class World
         return $this->eggToFemale;
     }
 
-    public function setEggToFemale(float $eggToFemale): static
+    public function setEggToFemale(?float $eggToFemale): static
     {
         $this->eggToFemale = $eggToFemale;
 
@@ -162,9 +171,39 @@ class World
         return $this->replaceMode;
     }
 
-    public function setReplaceMode(ReplaceModeEnum $replaceMode): static
+    public function setReplaceMode(?ReplaceModeEnum $replaceMode): static
     {
         $this->replaceMode = $replaceMode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Run>
+     */
+    public function getRuns(): Collection
+    {
+        return $this->runs;
+    }
+
+    public function addRun(Run $run): static
+    {
+        if (!$this->runs->contains($run)) {
+            $this->runs->add($run);
+            $run->setWorld($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRun(Run $run): static
+    {
+        if ($this->runs->removeElement($run)) {
+            // set the owning side to null (unless already changed)
+            if ($run->getWorld() === $this) {
+                $run->setWorld(null);
+            }
+        }
 
         return $this;
     }

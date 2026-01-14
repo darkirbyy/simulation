@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% import 'home/macro.html.twig' as m %}
+
+{% set title = 'Nouvelle simulation' %}
+
+{% block main %}
+  {{ m.backlink(path('necesse_run_index')) }}
+  {{ form_start(form) }}
+  <h5 class="mb-1">Paramètres globaux</h5>
+  <div class="d-flex gap-2 mb-3">
+    {{ form_row(form.world) }}
+    {{ form_row(form.time) }}
+    {{ form_row(form.seed) }}
+  </div>
+  <h5 class="mb-1">Paramètres initiaux</h5>
+  <div class="d-flex gap-2 mb-3">
+    {{ form_row(form.initialHen) }}
+    {{ form_row(form.initialRooster) }}
+    <div class="app-necesse-w-33"></div>
+  </div>
+  <h5 class="mb-1">Paramètres limites</h5>
+  <div class="d-flex gap-2 mb-3">
+    {{ form_row(form.limitHen) }}
+    {{ form_row(form.limitRooster) }}
+    {{ form_row(form.limitNest) }}
+  </div>
+  {{ form_end(form) }}
+{% endblock %}
