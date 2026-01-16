@@ -6,8 +6,11 @@ namespace App\Entity\Necesse;
 
 use App\Repository\Necesse\BarRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: BarRepository::class)]
+#[ORM\UniqueConstraint(fields: ['id', 'time'])]
+#[UniqueEntity(fields: ['id', 'time'])]
 class Bar
 {
     // /////////////////////////////////////////////////////
@@ -15,6 +18,10 @@ class Bar
     // /////////////////////////////////////////////////////
 
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
     #[ORM\Column]
     private ?int $time = null;
 
@@ -57,6 +64,11 @@ class Bar
     // /////////////////////////////////////////////////////
     // Doctrine auto-generated getter and setter ///////////
     // /////////////////////////////////////////////////////
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getTime(): ?int
     {
