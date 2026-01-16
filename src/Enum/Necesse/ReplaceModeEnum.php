@@ -12,7 +12,6 @@ enum ReplaceModeEnum: string implements TranslatableInterface
     case Random = 'Random';
     case Optimal = 'Optimal';
 
-    // Implement the TranslatableInterface so that the label are automatically translated in the form
     public function trans(TranslatorInterface $trans, ?string $locale = null): string
     {
         return match ($this) {

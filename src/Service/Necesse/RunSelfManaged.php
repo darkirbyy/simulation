@@ -25,8 +25,10 @@ class RunSelfManaged implements RunInterface
 
     public function start(Sim $sim, Randomizer $randomizer): Bar
     {
+        // Initialize the henhouse with sim params, the randomizer, empty pool and 0 products
         $this->henhouse = new Henhouse($sim, $randomizer, new ArrayCollection(), 0, 0);
 
+        // Add as much hens and roosters as stated by the initial conditions
         for ($initialHen = 0; $initialHen < $sim->getInitialHen(); $initialHen++) {
             $hen = new Hen($this->henhouse);
             $hen->initialize();
@@ -36,22 +38,29 @@ class RunSelfManaged implements RunInterface
             $rooster->initialize();
         }
 
+        // return the bar corresponding to this initial state
         return $this->henhouseToBar(0);
     }
 
     public function update(int $time): Bar
     {
+        // Update the timer of each living being in the pool
         foreach ($this->henhouse->livingBeings as $livingBeing) {
             $livingBeing->tick();
         }
 
+        // return the bar corresponding to the current state
         return $this->henhouseToBar($time);
     }
 
     public function stop(): void
     {
+        // nothing to do at the end
     }
 
+    /**
+     * Convert the henhouse pool and products count to a bar.
+     */
     private function henhouseToBar(int $time): Bar
     {
         $bar = new Bar();

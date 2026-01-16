@@ -13,14 +13,18 @@ class Rooster extends LivingBeing
 
     public function initialize(...$args): void
     {
+        // At the beginning, the rooster can directly fertilized an hen, then add the rooster to the pool
         $this->timeBeforeFertilize = 1;
         $this->henhouse->livingBeings->add($this);
     }
 
     public function tick(): void
     {
+        // Timer before fertilizing another hen
         $this->timeBeforeFertilize--;
+
         if (0 === $this->timeBeforeFertilize) {
+            // When timer hit 0, choose a random not fertilized hen and fertilized it, or wait one step if none is available
             $hensVirgo = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => !$h->getFertilized());
             if ($hensVirgo->count() > 0) {
                 $this->henhouse->randomElement($hensVirgo)->fertilize();
