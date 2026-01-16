@@ -56,10 +56,10 @@ class World
     private ?ReplaceModeEnum $replaceMode = null;
 
     /**
-     * @var Collection<int, Run>
+     * @var Collection<int, Sim>
      */
-    #[ORM\OneToMany(targetEntity: Run::class, mappedBy: 'world', orphanRemoval: true, cascade: ['remove'])]
-    private Collection $runs;
+    #[ORM\OneToMany(targetEntity: Sim::class, mappedBy: 'world', orphanRemoval: true, cascade: ['remove'])]
+    private Collection $sims;
 
     // /////////////////////////////////////////////////////
     // Custom methods and validation constraints ///////////
@@ -71,7 +71,7 @@ class World
         $this->chickToChicken = new MinMax();
         $this->henToLay = new MinMax();
         $this->roosterToFertilize = new MinMax();
-        $this->runs = new ArrayCollection();
+        $this->sims = new ArrayCollection();
     }
 
     public function setDefaults(): static
@@ -181,29 +181,29 @@ class World
     }
 
     /**
-     * @return Collection<int, Run>
+     * @return Collection<int, Sim>
      */
-    public function getRuns(): Collection
+    public function getSims(): Collection
     {
-        return $this->runs;
+        return $this->sims;
     }
 
-    public function addRun(Run $run): static
+    public function addSim(Sim $sim): static
     {
-        if (!$this->runs->contains($run)) {
-            $this->runs->add($run);
-            $run->setWorld($this);
+        if (!$this->sims->contains($sim)) {
+            $this->sims->add($sim);
+            $sim->setWorld($this);
         }
 
         return $this;
     }
 
-    public function removeRun(Run $run): static
+    public function removeSim(Sim $sim): static
     {
-        if ($this->runs->removeElement($run)) {
+        if ($this->sims->removeElement($sim)) {
             // set the owning side to null (unless already changed)
-            if ($run->getWorld() === $this) {
-                $run->setWorld(null);
+            if ($sim->getWorld() === $this) {
+                $sim->setWorld(null);
             }
         }
 

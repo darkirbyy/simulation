@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-{% from 'necesse/macro.html.twig' import display_seconds %}
+{% from 'necesse/macro.html.twig' import display_seconds, display_microseconds %}
 
 {% set title = "Détails d'un monde" %}
 
@@ -61,11 +61,11 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      {% for run in world.runs %}
+      {% for sim in world.sims %}
         <tr>
-          <td>{{ run.date|format_datetime('medium', 'medium') }}</td>
-          <td>{{ display_seconds(run.duration) }}</td>
-          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_run_show', { id: run.id })) }}</td>
+          <td>{{ sim.date|format_datetime('medium', 'medium') }}</td>
+          <td>{{ display_microseconds(sim.duration) }}</td>
+          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_sim_show', { id: sim.id })) }}</td>
         </tr>
       {% endfor %}
     </tbody>

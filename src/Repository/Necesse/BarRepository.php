@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repository\Necesse;
 
-use App\Entity\Necesse\Run;
+use App\Entity\Necesse\Bar;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RunRepository extends ServiceEntityRepository
+class BarRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Run::class);
+        parent::__construct($registry, Bar::class);
     }
 }

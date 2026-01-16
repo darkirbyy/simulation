@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-{% from 'necesse/macro.html.twig' import display_seconds %}
+{% from 'necesse/macro.html.twig' import display_seconds, display_microseconds %}
 
 {% set title = 'Gestions des simulations' %}
 
 {% block main %}
   {{ m.backlink(path('necesse_index')) }}
-  {{ m.add_button(path('necesse_run_new'), 'Lancer une nouvelle simulation') }}
+  {{ m.add_button(path('necesse_sim_new'), 'Lancer une nouvelle simulation') }}
 
   {# Table displaying all objects #}
   <table class="mt-2 table table-striped table-hover">
@@ -20,12 +20,12 @@
       </tr>
     </thead>
     <tbody class="table-group-divider">
-      {% for run in runs %}
+      {% for sim in sims %}
         <tr>
-          <td class="py-2">{{ run.world.label }}</td>
-          <td class="py-2">{{ run.date|format_datetime('medium', 'medium') }}</td>
-          <td class="py-2">{{ display_seconds(run.duration) }}</td>
-          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_run_show', { id: run.id })) }}</td>
+          <td class="py-2">{{ sim.world.label }}</td>
+          <td class="py-2">{{ sim.date|format_datetime('medium', 'medium') }}</td>
+          <td class="py-2">{{ display_microseconds(sim.duration) }}</td>
+          <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_sim_show', { id: sim.id })) }}</td>
         </tr>
       {% endfor %}
     </tbody>

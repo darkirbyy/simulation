@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Necesse;
 
-use App\Entity\Necesse\Run;
+use App\Entity\Necesse\Sim;
 use App\Entity\Necesse\World;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RunType extends AbstractType
+class SimType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -89,7 +89,7 @@ class RunType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Run::class,
+            'data_class' => Sim::class,
             'translation_domain' => false,
             'attr' => [
                 'novalidate' => true,

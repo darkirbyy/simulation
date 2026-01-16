@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity\Necesse;
 
-use App\Repository\Necesse\RunRepository;
+use App\Repository\Necesse\SimRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: RunRepository::class)]
-class Run
+#[ORM\Entity(repositoryClass: SimRepository::class)]
+class Sim
 {
     // /////////////////////////////////////////////////////
     // All fields and their validation constraints /////////
@@ -64,14 +64,14 @@ class Run
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $seed = null;
 
-    #[ORM\ManyToOne(inversedBy: 'runs')]
+    #[ORM\ManyToOne(inversedBy: 'sims')]
     #[ORM\JoinColumn(nullable: false)]
     private ?World $world = null;
 
     /**
      * @var Collection<int, Bar>
      */
-    #[ORM\OneToMany(targetEntity: Bar::class, mappedBy: 'run', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Bar::class, mappedBy: 'sim', orphanRemoval: true, cascade: ['persist'])]
     private Collection $bars;
 
     // /////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ class Run
     {
         if (!$this->bars->contains($bar)) {
             $this->bars->add($bar);
-            $bar->setRun($this);
+            $bar->setSim($this);
         }
 
         return $this;
@@ -247,8 +247,8 @@ class Run
     {
         if ($this->bars->removeElement($bar)) {
             // set the owning side to null (unless already changed)
-            if ($bar->getRun() === $this) {
-                $bar->setRun(null);
+            if ($bar->getSim() === $this) {
+                $bar->setSim(null);
             }
         }
 

@@ -5,36 +5,34 @@ declare(strict_types=1);
 namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
-use App\Entity\Necesse\Run;
+use App\Entity\Necesse\Sim;
 
-class RunManager
+class SimManager
 {
-    public function __construct(private SimInterface $sim)
+    public function calculateBars(Sim $sim): void
     {
-    }
+        $run = new RunTest();
 
-    public function calculateBars(Run $run): void
-    {
-        $run->setDate(new \DateTime());
-        srand($run->getSeed());
+        $sim->setDate(new \DateTime());
+        srand($sim->getSeed());
         $startTime = microtime(true);
 
-        $bar = $this->sim->start($run);
-        $run->addBar($bar);
+        $bar = $run->start($sim);
+        $sim->addBar($bar);
         $previousBar = $bar;
 
-        for ($time = 1; $time <= $run->getTime(); ++$time) {
-            $bar = $this->sim->update($time);
-            if (!$this->areBarsEqual($bar, $previousBar) || $time === $run->getTime()) {
-                $run->addBar($bar);
+        for ($time = 1; $time <= $sim->getTime(); ++$time) {
+            $bar = $run->update($time);
+            if (!$this->areBarsEqual($bar, $previousBar) || $time === $sim->getTime()) {
+                $sim->addBar($bar);
                 $previousBar = $bar;
             }
         }
 
-        $this->sim->stop();
+        $run->stop();
 
         $stopTime = microtime(true);
-        $run->setDuration($stopTime - $startTime);
+        $sim->setDuration($stopTime - $startTime);
     }
 
     public function areBarsEqual(Bar $bar1, Bar $bar2): bool

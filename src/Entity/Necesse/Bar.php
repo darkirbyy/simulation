@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity\Necesse;
 
-use App\Repository\Necesse\RunRepository;
+use App\Repository\Necesse\BarRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RunRepository::class)]
+#[ORM\Entity(repositoryClass: BarRepository::class)]
 class Bar
 {
     // /////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ class Bar
 
     #[ORM\ManyToOne(inversedBy: 'bars')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Run $run = null;
+    private ?Sim $sim = null;
 
     // /////////////////////////////////////////////////////
     // Custom methods and validation constraints ///////////
@@ -166,14 +166,14 @@ class Bar
         return $this;
     }
 
-    public function getRun(): ?Run
+    public function getSim(): ?Sim
     {
-        return $this->run;
+        return $this->sim;
     }
 
-    public function setRun(?Run $run): static
+    public function setSim(?Sim $sim): static
     {
-        $this->run = $run;
+        $this->sim = $sim;
 
         return $this;
     }

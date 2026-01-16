@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
-use App\Entity\Necesse\Run;
+use App\Entity\Necesse\Sim;
 
-class SimTest implements SimInterface
+class RunTest implements RunInterface
 {
-    public function start(Run $run): Bar
+    public function start(Sim $sim): Bar
     {
         $bar = new Bar();
         $bar->setTime(0);

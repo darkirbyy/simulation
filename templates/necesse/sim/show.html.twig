@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-{% from 'necesse/macro.html.twig' import display_seconds %}
+{% from 'necesse/macro.html.twig' import display_seconds, display_microseconds %}
 
 {% set title = "Détails d'une simulation" %}
 
 {% block main %}
-  {{ m.backlink(path('necesse_run_index')) }}
+  {{ m.backlink(path('necesse_sim_index')) }}
 
   <h4 class="mt-2 mb-0">Paramètres</h4>
   <table class="table table-striped table-hover">
@@ -18,17 +18,17 @@
       <tr>
         <td>Monde</td>
         <td>
-          {{ run.world.label }}
-          {{ m.show_button(path('necesse_world_show', { id: run.world.id })) }}
+          {{ sim.world.label }}
+          {{ m.show_button(path('necesse_world_show', { id: sim.world.id })) }}
         </td>
       </tr>
       <tr>
         <td>Temps</td>
-        <td>{{ display_seconds(run.time) }}</td>
+        <td>{{ display_seconds(sim.time) }}</td>
       </tr>
       <tr>
         <td>Graine</td>
-        <td>{{ run.seed }}</td>
+        <td>{{ sim.seed }}</td>
       </tr>
     </tbody>
     <thead>
@@ -39,11 +39,11 @@
     <tbody class="table-group-divider">
       <tr>
         <td>Poules</td>
-        <td>{{ run.initialHen }}</td>
+        <td>{{ sim.initialHen }}</td>
       </tr>
       <tr>
         <td>Coqs</td>
-        <td>{{ run.initialRooster }}</td>
+        <td>{{ sim.initialRooster }}</td>
       </tr>
     </tbody>
     <thead>
@@ -54,15 +54,15 @@
     <tbody class="table-group-divider">
       <tr>
         <td>Poules</td>
-        <td>{{ run.limitHen }}</td>
+        <td>{{ sim.limitHen }}</td>
       </tr>
       <tr>
         <td>Coqs</td>
-        <td>{{ run.limitRooster }}</td>
+        <td>{{ sim.limitRooster }}</td>
       </tr>
       <tr>
         <td>Nids</td>
-        <td>{{ run.limitNest }}</td>
+        <td>{{ sim.limitNest }}</td>
       </tr>
     </tbody>
   </table>
@@ -78,17 +78,17 @@
     <tbody class="table-group-divider">
       <tr>
         <td>Date d'exécution</td>
-        <td>{{ run.date|format_datetime('medium', 'medium') }}</td>
+        <td>{{ sim.date|format_datetime('medium', 'medium') }}</td>
       </tr>
       <tr>
         <td>Temps d'exécution</td>
-        <td>{{ display_seconds(run.duration) }}</td>
+        <td>{{display_microseconds(sim.duration) }}</td>
       </tr>
     </tbody>
   </table>
 
   <h4 class="mt-5 mb-0">Résultats</h4>
 
-  {{ m.delete_button('delete-run', 'Supprimer cette simulation') }}
-  {{ m.delete_modale('delete-run', path('necesse_run_delete', { id: run.id }), 'Attention, cela supprimera <strong> toutes les données</strong> de la simulation.') }}
+  {{ m.delete_button('delete-sim', 'Supprimer cette simulation') }}
+  {{ m.delete_modale('delete-sim', path('necesse_sim_delete', { id: sim.id }), 'Attention, cela supprimera <strong>toutes les données</strong> de la simulation.') }}
 {% endblock %}

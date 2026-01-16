@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
-use App\Entity\Necesse\Run;
+use App\Entity\Necesse\Sim;
 
-interface SimInterface
+interface RunInterface
 {
     /**
      * Called at the start of the simulation, must return the initial bar.
      */
-    public function start(Run $run): Bar;
+    public function start(Sim $sim): Bar;
 
     /**
      * Called at every step of the simulation, must return the bar at time $time.
