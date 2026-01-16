@@ -2,7 +2,7 @@
   {% set h = (seconds / 3600)|round(0, 'floor') %}
   {% set m = (seconds % 3600 / 60)|round(0, 'floor') %}
   {% set s = seconds % 60 %}
-  {{- (h > 0 ? h ~ 'h ' : '') ~ (m > 0 ? m ~ 'min ' : '') ~ (s > 0 ? s ~ 's ' : '') -}}
+  {{- (h > 0 ? h ~ 'h ' : '') ~ (m > 0 ? m ~ 'min ' : '') ~ (s > 0 or (h == 0 and m == 0) ? s ~ 's ' : '') -}}
 {% endmacro %}
 
 {% macro display_microseconds(microseconds) %}

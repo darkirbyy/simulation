@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\SelfManaged;
 
-use App\Entity\Necesse\Sim;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
-use Random\Randomizer;
 
 class Rooster extends LivingBeing
 {
     private int $timeBeforeFertilize;
 
-    public function __construct(Sim $sim, Randomizer $randomizer, Henhouse $henhouse)
+    public function initialize(): void
     {
         $this->timeBeforeFertilize = 1;
-
-        return parent::__construct($sim, $randomizer, $henhouse);
+        $this->henhouse->livingBeings->add($this);
     }
 
     public function tick(): void

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\SelfManaged;
 
-use App\Entity\Necesse\Sim;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
-use Random\Randomizer;
 
 class Egg extends LivingBeing
 {
     private int $timeBeforeHatch;
 
-    public function __construct(Sim $sim, Randomizer $randomizer, Henhouse $henhouse, bool $fertilized)
+    public function initialize(bool $fertilized): void
     {
         if (!$fertilized || $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Egg)->count() === $this->sim->getLimitNest()) {
             ++$this->henhouse->producedEgg;
@@ -21,15 +19,14 @@ class Egg extends LivingBeing
             $this->timeBeforeHatch = $this->randomBetween($this->sim->getWorld()->getEggToChick());
             $this->henhouse->livingBeings->add($this);
         }
-
-        return parent::__construct($sim, $randomizer, $henhouse);
     }
 
     public function tick(): void
     {
         --$this->timeBeforeHatch;
         if (0 === $this->timeBeforeHatch) {
-            new Chick($this->sim, $this->randomizer, $this->henhouse);
+            $chick = new Chick($this->sim, $this->randomizer, $this->henhouse);
+            $chick->initialize();
             $this->henhouse->livingBeings->removeElement($this);
         }
     }

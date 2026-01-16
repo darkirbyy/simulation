@@ -18,6 +18,8 @@ abstract class LivingBeing
     {
     }
 
+    // abstract public function initialize(...$args): void;
+
     abstract public function tick(): void;
 
     abstract public function getSex(): SexEnum;
@@ -36,6 +38,6 @@ abstract class LivingBeing
 
     protected function randomElement(ArrayCollection $array): mixed
     {
-        return $array->get($this->randomizer->getInt(0, $array->count() - 1));
+        return $array->get($array->getKeys()[$this->randomizer->getInt(0, $array->count() - 1)]);
     }
 }

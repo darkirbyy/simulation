@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\SelfManaged;
 
-use App\Entity\Necesse\Sim;
 use App\Enum\Necesse\ReplaceModeEnum;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
-use Random\Randomizer;
 
 class Chick extends LivingBeing
 {
     private int $timeBeforeAdult;
     private SexEnum $sex;
 
-    public function __construct(Sim $sim, Randomizer $randomizer, Henhouse $henhouse)
+    public function initialize(): void
     {
         $this->sex = $this->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->timeBeforeAdult = $this->randomBetween($this->sim->getWorld()->getChickToChicken());
@@ -30,8 +28,6 @@ class Chick extends LivingBeing
             }
         }
         $this->henhouse->livingBeings->add($this);
-
-        return parent::__construct($sim, $randomizer, $henhouse);
     }
 
     public function tick(): void
@@ -40,9 +36,11 @@ class Chick extends LivingBeing
         if (0 === $this->timeBeforeAdult) {
             $this->henhouse->livingBeings->removeElement($this);
             if (SexEnum::Female == $this->sex) {
-                new Hen($this->sim, $this->randomizer, $this->henhouse);
+                $hen = new Hen($this->sim, $this->randomizer, $this->henhouse);
+                $hen->initialize();
             } else {
-                new Rooster($this->sim, $this->randomizer, $this->henhouse);
+                $rooster = new Rooster($this->sim, $this->randomizer, $this->henhouse);
+                $rooster->initialize();
             }
         }
     }

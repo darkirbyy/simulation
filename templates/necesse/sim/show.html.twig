@@ -92,6 +92,32 @@
   </table>
 
   <h4 class="mt-5 mb-0">Résultats</h4>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Temps</th>
+        <th scope="col">Oeufs</th>
+        <th scope="col">Poussins (M/F)</th>
+        <th scope="col">Poules (F/V)</th>
+        <th scope="col">Coqs</th>
+        <th scope="col">Prod oeufs</th>
+        <th scope="col">Prod viande</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for bar in sim.bars %}
+        <tr>
+          <td>{{ mn.display_seconds(bar.time) }}</td>
+          <td>{{ bar.livingEgg }}</td>
+          <td>{{ bar.livingChickMale ~ ' / ' ~ bar.livingChickFemale }}</td>
+          <td>{{ bar.livingHenFertilized ~ ' / ' ~ bar.livingHenVirgo }}</td>
+          <td>{{ bar.livingRooster }}</td>
+          <td>{{ bar.producedEgg }}</td>
+          <td>{{ bar.producedMeat }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
   {{ m.delete_button('delete-sim', 'Supprimer cette simulation') }}
   {{ m.delete_modale('delete-sim', path('necesse_sim_delete', { id: sim.id }), 'Attention, cela supprimera <strong>toutes les données</strong> de la simulation.') }}
