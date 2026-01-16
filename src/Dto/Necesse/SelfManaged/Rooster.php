@@ -21,7 +21,7 @@ class Rooster extends LivingBeing
     {
         $this->timeBeforeFertilize--;
         if (0 === $this->timeBeforeFertilize) {
-            $hensVirgo = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => TypeEnum::Hen === $l->getType())->filter(fn (Hen $h) => !$h->getFertilized());
+            $hensVirgo = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => !$h->getFertilized());
             if ($hensVirgo->count() > 0) {
                 $this->henhouse->randomElement($hensVirgo)->fertilize();
                 $this->timeBeforeFertilize = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getRoosterToFertilize());
@@ -38,6 +38,11 @@ class Rooster extends LivingBeing
 
     public function getType(): TypeEnum
     {
-        return TypeEnum::Rooster;
+        return TypeEnum::Chicken;
+    }
+
+    public function getTimer(): int
+    {
+        return $this->timeBeforeFertilize;
     }
 }

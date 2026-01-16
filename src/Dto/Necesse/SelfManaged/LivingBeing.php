@@ -20,4 +20,6 @@ abstract class LivingBeing
     abstract public function getSex(): SexEnum;
 
     abstract public function getType(): TypeEnum;
+
+    abstract public function getTimer(): int;
 }

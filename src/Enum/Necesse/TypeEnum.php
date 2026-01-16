@@ -8,6 +8,5 @@ enum TypeEnum: string
 {
     case Egg = 'E';
     case Chick = 'C';
-    case Hen = 'H';
-    case Rooster = 'R';
+    case Chicken = 'K';
 }

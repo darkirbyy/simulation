@@ -41,4 +41,9 @@ class Egg extends LivingBeing
     {
         return TypeEnum::Egg;
     }
+
+    public function getTimer(): int
+    {
+        return $this->timeBeforeHatch;
+    }
 }

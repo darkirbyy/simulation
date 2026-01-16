@@ -37,7 +37,12 @@ class Hen extends LivingBeing
 
     public function getType(): TypeEnum
     {
-        return TypeEnum::Hen;
+        return TypeEnum::Chicken;
+    }
+
+    public function getTimer(): int
+    {
+        return $this->timeBeforeLay;
     }
 
     public function getFertilized(): bool

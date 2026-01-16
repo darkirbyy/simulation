@@ -18,14 +18,17 @@ class Chick extends LivingBeing
         $this->sex = $this->henhouse->randomProba($this->henhouse->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->timeBeforeAdult = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getChickToChicken());
 
-        $chickensOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex);
+        $chickensOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex && TypeEnum::Chicken === $l->getType());
         if ($chickensOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
             if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
-                $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($chickensOfSameSex));
-                $this->henhouse->producedMeat++;
+                $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);
             } else {
-                throw new \Exception('Optimal mode not implemented yet');
+                // todo : false
+                $maxTimer = max(...(clone $chickensOfSameSex)->map(fn (LivingBeing $l) => $l->getTimer())->toArray());
+                $chickenToRemove = $chickensOfSameSex->findFirst(fn (LivingBeing $l) => $l->getTimer() == $maxTimer);
             }
+            $this->henhouse->producedMeat++;
+            $this->henhouse->livingBeings->removeElement($chickenToRemove);
         }
         $this->henhouse->livingBeings->add($this);
     }
@@ -53,5 +56,10 @@ class Chick extends LivingBeing
     public function getType(): TypeEnum
     {
         return TypeEnum::Chick;
+    }
+
+    public function getTimer(): int
+    {
+        return $this->timeBeforeAdult;
     }
 }
