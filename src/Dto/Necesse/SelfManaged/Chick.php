@@ -13,7 +13,7 @@ class Chick extends LivingBeing
     private int $timeBeforeAdult;
     private SexEnum $sex;
 
-    public function initialize(): void
+    public function initialize(...$args): void
     {
         $this->sex = $this->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->timeBeforeAdult = $this->randomBetween($this->sim->getWorld()->getChickToChicken());

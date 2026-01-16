@@ -12,7 +12,7 @@ class Hen extends LivingBeing
     private int $timeBeforeLay;
     private bool $fertilized;
 
-    public function initialize(): void
+    public function initialize(...$args): void
     {
         $this->sex = $this->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->fertilized = false;

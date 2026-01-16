@@ -18,7 +18,7 @@ abstract class LivingBeing
     {
     }
 
-    // abstract public function initialize(...$args): void;
+    abstract public function initialize(...$args): void;
 
     abstract public function tick(): void;
 

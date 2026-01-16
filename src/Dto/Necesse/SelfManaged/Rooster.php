@@ -11,7 +11,7 @@ class Rooster extends LivingBeing
 {
     private int $timeBeforeFertilize;
 
-    public function initialize(): void
+    public function initialize(...$args): void
     {
         $this->timeBeforeFertilize = 1;
         $this->henhouse->livingBeings->add($this);

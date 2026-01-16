@@ -11,8 +11,9 @@ class Egg extends LivingBeing
 {
     private int $timeBeforeHatch;
 
-    public function initialize(bool $fertilized): void
+    public function initialize(...$args): void
     {
+        $fertilized = $args[0];
         if (!$fertilized || $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Egg)->count() === $this->sim->getLimitNest()) {
             ++$this->henhouse->producedEgg;
         } else {
