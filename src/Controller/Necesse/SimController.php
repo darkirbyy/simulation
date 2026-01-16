@@ -11,6 +11,7 @@ use App\Repository\Necesse\SimRepository;
 use App\Service\Home\FormManager;
 use App\Service\Necesse\SimManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,9 +42,12 @@ class SimController extends AbstractController
         $flashSuccess = new FlashMessage('Nouvelle simulation executée avec succès.');
         if ($form->isSubmitted() && $form->isValid()) {
             $simManager->calculateBars($sim);
-            $fm->persist($sim, $flashSuccess);
 
-            return $this->redirectToRoute('necesse_sim_index');
+            if (!$fm->persist($sim, $flashSuccess)) {
+                $form->addError(new FormError(''));
+            } else {
+                return $this->redirectToRoute('necesse_sim_index');
+            }
         }
 
         return $this->render('necesse/sim/new.html.twig', [

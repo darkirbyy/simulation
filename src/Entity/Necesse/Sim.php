@@ -75,6 +75,7 @@ class Sim
      * @var Collection<int, Bar>
      */
     #[ORM\OneToMany(targetEntity: Bar::class, mappedBy: 'sim', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OrderBy(['time' => 'ASC'])]
     private Collection $bars;
 
     // /////////////////////////////////////////////////////

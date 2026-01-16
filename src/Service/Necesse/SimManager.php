@@ -9,7 +9,7 @@ use App\Entity\Necesse\Sim;
 
 class SimManager
 {
-    public function __construct(private RunInterface $run)
+    public function __construct(private RunSelfManaged $run)
     {
     }
 
@@ -39,7 +39,7 @@ class SimManager
         $sim->setMemory($memoryAfter - $memoryBefore);
     }
 
-    public function areBarsEqual(Bar $bar1, Bar $bar2): bool
+    private function areBarsEqual(Bar $bar1, Bar $bar2): bool
     {
         return $bar1->getProducedEgg() == $bar2->getProducedEgg()
             && $bar1->getProducedMeat() == $bar2->getProducedMeat()
