@@ -50,7 +50,7 @@ class SimController extends AbstractController
             if (!$fm->persist($sim, $flashSuccess)) {
                 $form->addError(new FormError(''));
             } else {
-                return $this->redirectToRoute('necesse_sim_index');
+                return $this->redirectToRoute('necesse_sim_show', ['id' => $sim->getId()]);
             }
         }
 
@@ -64,6 +64,14 @@ class SimController extends AbstractController
     public function show(Sim $sim): Response
     {
         return $this->render('necesse/sim/show.html.twig', [
+            'sim' => $sim,
+        ]);
+    }
+
+    #[Route('/{id}/results', name: 'results', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    public function results(Sim $sim): Response
+    {
+        return $this->render('necesse/sim/_results.html.twig', [
             'sim' => $sim,
         ]);
     }

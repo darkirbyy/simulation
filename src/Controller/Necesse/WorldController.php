@@ -37,9 +37,9 @@ class WorldController extends AbstractController
         $form = $this->createForm(WorldType::class, $world);
         $form->handleRequest($request);
 
-        $flashSuccess = new FlashMessage('Nouveau paramètre du monde ajouté avec succès.');
+        $flashSuccess = new FlashMessage('Nouveau monde ajouté avec succès.');
         if ($fm->validateAndPersist($form, $world, $flashSuccess)) {
-            return $this->redirectToRoute('necesse_world_index');
+            return $this->redirectToRoute('necesse_world_show', ['id' => $world->getId()]);
         }
 
         return $this->render('necesse/world/new.html.twig', [
