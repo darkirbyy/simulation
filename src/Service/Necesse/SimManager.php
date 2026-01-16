@@ -9,30 +9,34 @@ use App\Entity\Necesse\Sim;
 
 class SimManager
 {
+    public function __construct(private RunInterface $run)
+    {
+    }
+
     public function calculateBars(Sim $sim): void
     {
-        $run = new RunTest();
-
         $sim->setDate(new \DateTime());
-        srand($sim->getSeed());
+        $memoryBefore = memory_get_usage();
         $startTime = microtime(true);
 
-        $bar = $run->start($sim);
+        $bar = $this->run->start($sim);
         $sim->addBar($bar);
         $previousBar = $bar;
 
         for ($time = 1; $time <= $sim->getTime(); ++$time) {
-            $bar = $run->update($time);
+            $bar = $this->run->update($time);
             if (!$this->areBarsEqual($bar, $previousBar) || $time === $sim->getTime()) {
                 $sim->addBar($bar);
                 $previousBar = $bar;
             }
         }
 
-        $run->stop();
+        $this->run->stop();
 
         $stopTime = microtime(true);
+        $memoryAfter = memory_get_usage();
         $sim->setDuration($stopTime - $startTime);
+        $sim->setMemory($memoryAfter - $memoryBefore);
     }
 
     public function areBarsEqual(Bar $bar1, Bar $bar2): bool

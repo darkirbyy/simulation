@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-{% from 'necesse/macro.html.twig' import display_seconds, display_microseconds %}
+{% import 'necesse/macro.html.twig' as mn %}
 
 {% set title = 'Gestions des simulations' %}
 
@@ -16,6 +16,7 @@
         <th class="align-center" scope="col">Monde</th>
         <th class="align-center" scope="col">Date</th>
         <th class="align-center" scope="col">Temps d'exécution</th>
+        <th class="align-center" scope="col">Mémoire consommée</th>
         <th class="w-1 text-nowrap text-end align-center" scope="col">Actions</th>
       </tr>
     </thead>
@@ -24,7 +25,8 @@
         <tr>
           <td class="py-2">{{ sim.world.label }}</td>
           <td class="py-2">{{ sim.date|format_datetime('medium', 'medium') }}</td>
-          <td class="py-2">{{ display_microseconds(sim.duration) }}</td>
+          <td class="py-2">{{ mn.display_microseconds(sim.duration) }}</td>
+          <td class="py-2">{{ mn.display_memory(sim.memory) }}</td>
           <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_sim_show', { id: sim.id })) }}</td>
         </tr>
       {% endfor %}

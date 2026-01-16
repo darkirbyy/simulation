@@ -8,3 +8,7 @@
 {% macro display_microseconds(microseconds) %}
   {{- (microseconds|round(4)) ~ 's' -}}
 {% endmacro %}
+
+{% macro display_memory(memory) %}
+  {{- ((memory / 1024 / 1024)|round(2)) ~ 'Mio' -}}
+{% endmacro %}

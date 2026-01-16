@@ -30,6 +30,9 @@ class Sim
     private ?float $duration = null;
 
     #[ORM\Column]
+    private ?int $memory = null;
+
+    #[ORM\Column]
     #[Assert\NotBlank]
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $initialHen = null;
@@ -125,6 +128,18 @@ class Sim
     public function setDuration(?float $duration): static
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getMemory(): ?int
+    {
+        return $this->memory;
+    }
+
+    public function setMemory(?int $memory): static
+    {
+        $this->memory = $memory;
 
         return $this;
     }

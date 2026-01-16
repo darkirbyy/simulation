@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% import 'home/macro.html.twig' as m %}
-{% from 'necesse/macro.html.twig' import display_seconds, display_microseconds %}
+{% import 'necesse/macro.html.twig' as mn %}
 
 {% set title = "Détails d'une simulation" %}
 
@@ -24,7 +24,7 @@
       </tr>
       <tr>
         <td>Temps</td>
-        <td>{{ display_seconds(sim.time) }}</td>
+        <td>{{ mn.display_seconds(sim.time) }}</td>
       </tr>
       <tr>
         <td>Graine</td>
@@ -82,7 +82,11 @@
       </tr>
       <tr>
         <td>Temps d'exécution</td>
-        <td>{{display_microseconds(sim.duration) }}</td>
+        <td>{{ mn.display_microseconds(sim.duration) }}</td>
+      </tr>
+      <tr>
+        <td>Mémoire consommée</td>
+        <td>{{ mn.display_memory(sim.memory) }}</td>
       </tr>
     </tbody>
   </table>
