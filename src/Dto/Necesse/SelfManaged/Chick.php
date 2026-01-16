@@ -15,14 +15,14 @@ class Chick extends LivingBeing
 
     public function initialize(...$args): void
     {
-        $this->sex = $this->henhouse->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
-        $this->timeBeforeAdult = $this->henhouse->randomBetween($this->sim->getWorld()->getChickToChicken());
+        $this->sex = $this->henhouse->randomProba($this->henhouse->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
+        $this->timeBeforeAdult = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getChickToChicken());
 
         $chickensOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex);
-        if ($chickensOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->sim->getLimitHen() : $this->sim->getLimitRooster())) {
-            if (ReplaceModeEnum::Random == $this->sim->getWorld()->getReplaceMode()) {
+        if ($chickensOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
+            if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
                 $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($chickensOfSameSex));
-                ++$this->henhouse->producedMeat;
+                $this->henhouse->producedMeat++;
             } else {
                 throw new \Exception('Optimal mode not implemented yet');
             }
@@ -32,14 +32,14 @@ class Chick extends LivingBeing
 
     public function tick(): void
     {
-        --$this->timeBeforeAdult;
+        $this->timeBeforeAdult--;
         if (0 === $this->timeBeforeAdult) {
             $this->henhouse->livingBeings->removeElement($this);
             if (SexEnum::Female == $this->sex) {
-                $hen = new Hen($this->sim, $this->henhouse);
+                $hen = new Hen($this->henhouse);
                 $hen->initialize();
             } else {
-                $rooster = new Rooster($this->sim, $this->henhouse);
+                $rooster = new Rooster($this->henhouse);
                 $rooster->initialize();
             }
         }

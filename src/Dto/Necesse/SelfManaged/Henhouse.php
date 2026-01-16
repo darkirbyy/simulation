@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Dto\Necesse\SelfManaged;
 
 use App\Entity\Necesse\MinMax;
+use App\Entity\Necesse\Sim;
 use Doctrine\Common\Collections\ArrayCollection;
 use Random\IntervalBoundary;
 use Random\Randomizer;
 
 class Henhouse
 {
-    public function __construct(public Randomizer $randomizer, public ArrayCollection $livingBeings, public int $producedEgg, public int $producedMeat)
+    public function __construct(public Sim $sim, public Randomizer $randomizer, public ArrayCollection $livingBeings, public int $producedEgg, public int $producedMeat)
     {
     }
 

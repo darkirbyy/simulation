@@ -26,7 +26,7 @@ class SimManager
         $sim->addBar($bar);
         $previousBar = $bar;
 
-        for ($time = 1; $time <= $sim->getTime(); ++$time) {
+        for ($time = 1; $time <= $sim->getTime(); $time++) {
             $bar = $this->run->update($time);
             if (!$this->areBarsEqual($bar, $previousBar) || $time === $sim->getTime()) {
                 $sim->addBar($bar);

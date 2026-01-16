@@ -14,19 +14,19 @@ class Hen extends LivingBeing
 
     public function initialize(...$args): void
     {
-        $this->sex = $this->henhouse->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
+        $this->sex = $this->henhouse->randomProba($this->henhouse->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->fertilized = false;
-        $this->timeBeforeLay = $this->henhouse->randomBetween($this->sim->getWorld()->getHenToLay());
+        $this->timeBeforeLay = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getHenToLay());
         $this->henhouse->livingBeings->add($this);
     }
 
     public function tick(): void
     {
-        --$this->timeBeforeLay;
+        $this->timeBeforeLay--;
         if (0 === $this->timeBeforeLay) {
-            $egg = new Egg($this->sim, $this->henhouse);
+            $egg = new Egg($this->henhouse);
             $egg->initialize($this->fertilized);
-            $this->timeBeforeLay = $this->henhouse->randomBetween($this->sim->getWorld()->getHenToLay());
+            $this->timeBeforeLay = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getHenToLay());
         }
     }
 

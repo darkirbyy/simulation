@@ -13,6 +13,7 @@ return (new PhpCsFixer\Config())
         '@PSR12' => true,
         '@Symfony' => true,
         'concat_space' => ['spacing' => 'one'],
+        'increment_style' => ['style' => 'post']
     ])
     ->setFinder($finder)
     ->setCacheFile("var/cache/linter/.php-cs-fixer.cache")
