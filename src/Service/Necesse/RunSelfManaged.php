@@ -13,7 +13,6 @@ use App\Entity\Necesse\Sim;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
-use Random\Engine\Xoshiro256StarStar;
 use Random\Randomizer;
 
 class RunSelfManaged implements RunInterface
@@ -24,17 +23,16 @@ class RunSelfManaged implements RunInterface
     {
     }
 
-    public function start(Sim $sim): Bar
+    public function start(Sim $sim, Randomizer $randomizer): Bar
     {
-        $randomizer = new Randomizer(new Xoshiro256StarStar($sim->getSeed()));
-        $this->henhouse = new Henhouse(new ArrayCollection(), 0, 0);
+        $this->henhouse = new Henhouse($randomizer, new ArrayCollection(), 0, 0);
 
         for ($initialHen = 0; $initialHen < $sim->getInitialHen(); ++$initialHen) {
-            $hen = new Hen($sim, $randomizer, $this->henhouse);
+            $hen = new Hen($sim, $this->henhouse);
             $hen->initialize();
         }
         for ($initialRooster = 0; $initialRooster < $sim->getInitialRooster(); ++$initialRooster) {
-            $rooster = new Rooster($sim, $randomizer, $this->henhouse);
+            $rooster = new Rooster($sim, $this->henhouse);
             $rooster->initialize();
         }
 

@@ -6,6 +6,8 @@ namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
 use App\Entity\Necesse\Sim;
+use Random\Engine\Xoshiro256StarStar;
+use Random\Randomizer;
 
 class SimManager
 {
@@ -19,7 +21,8 @@ class SimManager
         $memoryBefore = memory_get_usage();
         $startTime = microtime(true);
 
-        $bar = $this->run->start($sim);
+        $randomizer = new Randomizer(new Xoshiro256StarStar($sim->getSeed()));
+        $bar = $this->run->start($sim, $randomizer);
         $sim->addBar($bar);
         $previousBar = $bar;
 

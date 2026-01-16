@@ -6,10 +6,11 @@ namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
 use App\Entity\Necesse\Sim;
+use Random\Randomizer;
 
 class RunTest implements RunInterface
 {
-    public function start(Sim $sim): Bar
+    public function start(Sim $sim, Randomizer $randomizer): Bar
     {
         $bar = new Bar();
         $bar->setTime(0);

@@ -15,13 +15,13 @@ class Chick extends LivingBeing
 
     public function initialize(...$args): void
     {
-        $this->sex = $this->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
-        $this->timeBeforeAdult = $this->randomBetween($this->sim->getWorld()->getChickToChicken());
+        $this->sex = $this->henhouse->randomProba($this->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
+        $this->timeBeforeAdult = $this->henhouse->randomBetween($this->sim->getWorld()->getChickToChicken());
 
         $chickensOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex);
         if ($chickensOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->sim->getLimitHen() : $this->sim->getLimitRooster())) {
             if (ReplaceModeEnum::Random == $this->sim->getWorld()->getReplaceMode()) {
-                $this->henhouse->livingBeings->removeElement($this->randomElement($chickensOfSameSex));
+                $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($chickensOfSameSex));
                 ++$this->henhouse->producedMeat;
             } else {
                 throw new \Exception('Optimal mode not implemented yet');
@@ -36,10 +36,10 @@ class Chick extends LivingBeing
         if (0 === $this->timeBeforeAdult) {
             $this->henhouse->livingBeings->removeElement($this);
             if (SexEnum::Female == $this->sex) {
-                $hen = new Hen($this->sim, $this->randomizer, $this->henhouse);
+                $hen = new Hen($this->sim, $this->henhouse);
                 $hen->initialize();
             } else {
-                $rooster = new Rooster($this->sim, $this->randomizer, $this->henhouse);
+                $rooster = new Rooster($this->sim, $this->henhouse);
                 $rooster->initialize();
             }
         }

@@ -17,7 +17,7 @@ class Egg extends LivingBeing
         if (!$fertilized || $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Egg)->count() === $this->sim->getLimitNest()) {
             ++$this->henhouse->producedEgg;
         } else {
-            $this->timeBeforeHatch = $this->randomBetween($this->sim->getWorld()->getEggToChick());
+            $this->timeBeforeHatch = $this->henhouse->randomBetween($this->sim->getWorld()->getEggToChick());
             $this->henhouse->livingBeings->add($this);
         }
     }
@@ -26,7 +26,7 @@ class Egg extends LivingBeing
     {
         --$this->timeBeforeHatch;
         if (0 === $this->timeBeforeHatch) {
-            $chick = new Chick($this->sim, $this->randomizer, $this->henhouse);
+            $chick = new Chick($this->sim, $this->henhouse);
             $chick->initialize();
             $this->henhouse->livingBeings->removeElement($this);
         }
