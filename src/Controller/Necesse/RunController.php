@@ -9,6 +9,7 @@ use App\Entity\Necesse\Run;
 use App\Form\Necesse\RunType;
 use App\Repository\Necesse\RunRepository;
 use App\Service\Home\FormManager;
+use App\Service\Necesse\RunManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,20 +30,19 @@ class RunController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, FormManager $fm): Response
+    public function new(Request $request, FormManager $fm, RunManager $runManager): Response
     {
         $run = new Run();
         $run->setDefaults();
-
-        // A enlever et mettre les vrais valeurs
-        $run->setDate(new \DateTime());
-        $run->setDuration(10);
 
         $form = $this->createForm(RunType::class, $run);
         $form->handleRequest($request);
 
         $flashSuccess = new FlashMessage('Nouvelle simulation executée avec succès.');
-        if ($fm->validateAndPersist($form, $run, $flashSuccess)) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $runManager->calculateBars($run);
+            $fm->persist($run, $flashSuccess);
+
             return $this->redirectToRoute('necesse_run_index');
         }
 

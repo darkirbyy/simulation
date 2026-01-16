@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity\Necesse;
 
 use App\Repository\Necesse\RunRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,12 +68,19 @@ class Run
     #[ORM\JoinColumn(nullable: false)]
     private ?World $world = null;
 
+    /**
+     * @var Collection<int, Bar>
+     */
+    #[ORM\OneToMany(targetEntity: Bar::class, mappedBy: 'run', orphanRemoval: true, cascade: ['persist'])]
+    private Collection $bars;
+
     // /////////////////////////////////////////////////////
     // Custom methods and validation constraints ///////////
     // /////////////////////////////////////////////////////
 
     public function __construct()
     {
+        $this->bars = new ArrayCollection();
     }
 
     public function setDefaults(): static
@@ -212,6 +221,36 @@ class Run
     public function setWorld(?World $world): static
     {
         $this->world = $world;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bar>
+     */
+    public function getBars(): Collection
+    {
+        return $this->bars;
+    }
+
+    public function addBar(Bar $bar): static
+    {
+        if (!$this->bars->contains($bar)) {
+            $this->bars->add($bar);
+            $bar->setRun($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBar(Bar $bar): static
+    {
+        if ($this->bars->removeElement($bar)) {
+            // set the owning side to null (unless already changed)
+            if ($bar->getRun() === $this) {
+                $bar->setRun(null);
+            }
+        }
 
         return $this;
     }
