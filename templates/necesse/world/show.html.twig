@@ -6,6 +6,14 @@
 
 {% block main %}
   {{ m.backlink(path('necesse_world_index')) }}
+  {{ m.delete_button('delete-world', 'Supprimer ce monde') }}
+  {{
+    m.delete_modale(
+      'delete-world',
+      path('necesse_world_delete', { id: world.id }),
+      'Attention, cela supprimera ce monde et <strong>toutes les simulations</strong> réalisées dedans.',
+    )
+  }}
 
   <h4 class="mt-2 mb-0">Paramètres</h4>
   <table class="mt-2 table table-striped table-hover">
@@ -72,13 +80,4 @@
       {% endfor %}
     </tbody>
   </table>
-
-  {{ m.delete_button('delete-world', 'Supprimer ce monde') }}
-  {{
-    m.delete_modale(
-      'delete-world',
-      path('necesse_world_delete', { id: world.id }),
-      'Attention, cela supprimera ce monde et <strong>toutes les simulations</strong> réalisées dedans.',
-    )
-  }}
 {% endblock %}

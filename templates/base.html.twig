@@ -25,7 +25,7 @@
     {% endblock %}
   </head>
 
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100" id="body-content">
     {# Bar not visible in prod env #}
     {% if env.app.env != 'prod' %}
       <div class="container-fluid p-0 m-0 text-center fw-bold d-flex justify-content-around app-env-dev">
@@ -80,7 +80,7 @@
     <main class="flex-grow-1" role="main" id="main-content">
       <section>
         <div class="container">
-          {# Redefine the flashes with the same width as the cards #}
+          {# Redefine the FLASHED with the same width as the cards #}
           <div class="mx-auto">
             {{ block('flash', 'home/flash.html.twig') }}
           </div>
@@ -90,6 +90,11 @@
         </div>
       </section>
     </main>
+
+    {# The UP button #}
+    <div class="sticky-bottom container p-4 text-end fs-5">
+      <a href="#body-content" data-turbo="false" class="p-2 text-secondary bg-secondary-subtle border rounded"><span class="bi bi-arrow-up"></span></a>
+    </div>
 
     {# The FOOTER divided in two part : left/right on large screen / on the top of each other on small screen #}
     <footer role="contentinfo">

@@ -7,6 +7,10 @@
 {% block main %}
   {{ m.backlink(path('necesse_sim_index')) }}
 
+  {{ m.add_button(path('necesse_sim_new', { id: sim.id }), 'Lancer une nouvelle simulation avec les mêmes paramètres') }}
+  {{ m.delete_button('delete-sim', 'Supprimer cette simulation') }}
+  {{ m.delete_modale('delete-sim', path('necesse_sim_delete', { id: sim.id }), 'Attention, cela supprimera <strong>toutes les données</strong> de la simulation.') }}
+
   <h4 class="mt-2 mb-0">Paramètres</h4>
   <table class="table table-striped table-hover">
     <thead>
@@ -118,7 +122,4 @@
       {% endfor %}
     </tbody>
   </table>
-
-  {{ m.delete_button('delete-sim', 'Supprimer cette simulation') }}
-  {{ m.delete_modale('delete-sim', path('necesse_sim_delete', { id: sim.id }), 'Attention, cela supprimera <strong>toutes les données</strong> de la simulation.') }}
 {% endblock %}

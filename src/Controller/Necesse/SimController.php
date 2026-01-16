@@ -30,11 +30,15 @@ class SimController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request, FormManager $fm, SimManager $simManager): Response
+    #[Route('/new/{id?}', name: 'new', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
+    public function new(?Sim $sim = null, Request $request, FormManager $fm, SimManager $simManager): Response
     {
-        $sim = new Sim();
-        $sim->setDefaults();
+        if (!is_null($sim)) {
+            $sim = clone $sim;
+        } else {
+            $sim = new Sim();
+            $sim->setDefaults();
+        }
 
         $form = $this->createForm(SimType::class, $sim);
         $form->handleRequest($request);
