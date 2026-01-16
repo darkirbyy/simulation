@@ -23,9 +23,7 @@ class Chick extends LivingBeing
             if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
                 $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);
             } else {
-                // todo : false
-                $maxTimer = max(...(clone $chickensOfSameSex)->map(fn (LivingBeing $l) => $l->getTimer())->toArray());
-                $chickenToRemove = $chickensOfSameSex->findFirst(fn (LivingBeing $l) => $l->getTimer() == $maxTimer);
+                $chickenToRemove = $chickensOfSameSex->reduce(fn (?LivingBeing $max, LivingBeing $l) => null === $max || $l->getTimer() > $max->getTimer() ? $l : $max);
             }
             $this->henhouse->producedMeat++;
             $this->henhouse->livingBeings->removeElement($chickenToRemove);
