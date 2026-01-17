@@ -6,8 +6,10 @@ namespace App\Form\Necesse;
 
 use App\Entity\Necesse\Sim;
 use App\Entity\Necesse\World;
+use App\Enum\Necesse\RunEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -75,6 +77,16 @@ class SimType extends AbstractType
                 'required' => true,
                 'row_attr' => [
                     'class' => 'app-necesse-w-33',
+                ],
+            ])
+            ->add('run', EnumType::class, [
+                'label' => 'Algorithme',
+                'required' => true,
+                'class' => RunEnum::class,
+                'expanded' => true,
+                'multiple' => false,
+                'label_attr' => [
+                    'class' => 'radio-inline',
                 ],
             ])
 

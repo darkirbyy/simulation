@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\SelfManaged;
 
-use App\Enum\Necesse\ReplaceModeEnum;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
 
@@ -28,13 +27,8 @@ class Chick extends LivingBeing
         if ($chickensOrChickOfSameSex->count() >= (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
             $chickensOfSameSex = $chickensOrChickOfSameSex->filter(fn (LivingBeing $l) => TypeEnum::Chicken == $l->getType());
             if ($chickensOfSameSex->count() > 0) {
-                if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
-                    $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);
-                } else {
-                    $chickenToRemove = $chickensOfSameSex->reduce(fn (?LivingBeing $max, LivingBeing $l) => null === $max || $l->getTimer() > $max->getTimer() ? $l : $max);
-                }
                 $this->henhouse->producedMeat++;
-                $this->henhouse->livingBeings->removeElement($chickenToRemove);
+                $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($chickensOfSameSex));
             }
         }
 

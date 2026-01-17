@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Necesse;
 
+use App\Enum\Necesse\RunEnum;
 use App\Repository\Necesse\SimRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -69,6 +70,10 @@ class Sim
     #[Assert\NotBlank]
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $seed = null;
+
+    #[ORM\Column(enumType: RunEnum::class)]
+    #[Assert\NotBlank]
+    private ?RunEnum $run = null;
 
     #[ORM\ManyToOne(inversedBy: 'sims')]
     #[ORM\JoinColumn(nullable: false)]
@@ -240,6 +245,18 @@ class Sim
     public function setSeed(?int $seed): static
     {
         $this->seed = $seed;
+
+        return $this;
+    }
+
+    public function getRun(): ?RunEnum
+    {
+        return $this->run;
+    }
+
+    public function setRun(?RunEnum $run): static
+    {
+        $this->run = $run;
 
         return $this;
     }

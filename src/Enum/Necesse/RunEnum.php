@@ -7,16 +7,16 @@ namespace App\Enum\Necesse;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-enum ReplaceModeEnum: string implements TranslatableInterface
+enum RunEnum: string implements TranslatableInterface
 {
-    case Random = 'Random';
-    case Optimal = 'Optimal';
+    case SelfManaged = 'SM';
+    case Centralized = 'CE';
 
     public function trans(TranslatorInterface $trans, ?string $locale = null): string
     {
         return match ($this) {
-            self::Random => 'Aléatoire',
-            self::Optimal => 'Optimal',
+            self::SelfManaged => 'Auto-managé',
+            self::Centralized => 'Centralisé',
         };
     }
 }

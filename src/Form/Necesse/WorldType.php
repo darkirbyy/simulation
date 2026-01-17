@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Necesse;
 
 use App\Entity\Necesse\World;
-use App\Enum\Necesse\ReplaceModeEnum;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,16 +41,7 @@ class WorldType extends AbstractType
                 'label' => "Probabilité qu'un oeuf donne une femelle (entre 0 et 1)",
                 'required' => true,
             ])
-            ->add('replaceMode', EnumType::class, [
-                'label' => 'Mode de remplacement quand un coq/une poule doit être tué(e)',
-                'required' => true,
-                'class' => ReplaceModeEnum::class,
-                'expanded' => true,
-                'multiple' => false,
-                'label_attr' => [
-                    'class' => 'radio-inline',
-                ],
-            ])
+
             ->add('submit', SubmitType::class, [
                 'label' => 'Valider',
                 'row_attr' => [

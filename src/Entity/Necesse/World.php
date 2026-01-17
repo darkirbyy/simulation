@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity\Necesse;
 
-use App\Enum\Necesse\ReplaceModeEnum;
 use App\Repository\Necesse\WorldRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,10 +51,6 @@ class World
     #[Assert\Range(min: 0, max: 1)]
     private ?float $eggToFemale = null;
 
-    #[ORM\Column(enumType: ReplaceModeEnum::class)]
-    #[Assert\NotBlank]
-    private ?ReplaceModeEnum $replaceMode = null;
-
     /**
      * @var Collection<int, Sim>
      */
@@ -83,7 +78,6 @@ class World
         $this->henToLay->setDefaults();
         $this->roosterToFertilize->setDefaults();
         $this->eggToFemale = 0.5;
-        $this->replaceMode = ReplaceModeEnum::Random;
 
         return $this;
     }
@@ -165,18 +159,6 @@ class World
     public function setEggToFemale(?float $eggToFemale): static
     {
         $this->eggToFemale = $eggToFemale;
-
-        return $this;
-    }
-
-    public function getReplaceMode(): ?ReplaceModeEnum
-    {
-        return $this->replaceMode;
-    }
-
-    public function setReplaceMode(?ReplaceModeEnum $replaceMode): static
-    {
-        $this->replaceMode = $replaceMode;
 
         return $this;
     }
