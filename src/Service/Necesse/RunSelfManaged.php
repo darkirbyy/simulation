@@ -43,11 +43,16 @@ class RunSelfManaged implements RunInterface
     {
         // Update the timer of each living being in the pool
         foreach ($this->henhouse->livingBeings as $livingBeing) {
-            $livingBeing->tick();
+            $livingBeing->tick($deltaTime);
+        }
+
+        $nextDeltaTime = PHP_INT_MAX;
+        foreach ($this->henhouse->livingBeings as $livingBeing) {
+            $nextDeltaTime = min($livingBeing->getTimer(), $nextDeltaTime);
         }
 
         // return the bar corresponding to the current state
-        return [$this->henhouseToBar(), 1];
+        return [$this->henhouseToBar(), $nextDeltaTime];
     }
 
     public function stop(): void

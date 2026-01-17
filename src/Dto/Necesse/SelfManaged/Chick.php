@@ -42,10 +42,10 @@ class Chick extends LivingBeing
         $this->henhouse->livingBeings->add($this);
     }
 
-    public function tick(): void
+    public function tick(int $deltaTime): void
     {
         // Time before becoming an hen or a rooster
-        $this->timeBeforeAdult--;
+        $this->timeBeforeAdult -= $deltaTime;
 
         if (0 === $this->timeBeforeAdult) {
             // When timer hit 0, create a new hen or rooster, add it to the pool and remove the chick from the pool

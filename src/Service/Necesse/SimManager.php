@@ -39,9 +39,9 @@ class SimManager
         // Start the runner
         $run->start($sim, $randomizer);
         $previousBar = null;
-
         $time = 0;
         $deltaTime = 0;
+
         // For each step in the simulation, update the runner and store the bar if it differs from the previous one
         while ($time <= $sim->getTime()) {
             [$bar, $deltaTime] = $run->update($deltaTime);
@@ -57,7 +57,7 @@ class SimManager
         // Stop the runner
         $run->stop();
 
-        // Finish the indicator
+        // Finish the indicators
         $stopTime = microtime(true);
         $memoryAfter = memory_get_usage();
         $sim->setDuration($stopTime - $startTime);

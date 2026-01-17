@@ -29,9 +29,9 @@ abstract class LivingBeing
     abstract public function initialize(...$args): void;
 
     /**
-     * Called at every step of the simulation.
+     * Called to advance the simulation of $deltaTime steps.
      */
-    abstract public function tick(): void;
+    abstract public function tick(int $deltaTime): void;
 
     /**
      * Determine the sex of the living being.

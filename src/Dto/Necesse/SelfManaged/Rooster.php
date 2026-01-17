@@ -32,10 +32,10 @@ class Rooster extends LivingBeing
         }
     }
 
-    public function tick(): void
+    public function tick(int $deltaTime): void
     {
         // Timer before fertilizing another hen
-        $this->timeBeforeFertilize--;
+        $this->timeBeforeFertilize -= $deltaTime;
 
         if (0 === $this->timeBeforeFertilize) {
             // When timer hit 0, choose a random not fertilized hen and fertilized it, or wait one step if none is available
