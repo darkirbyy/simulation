@@ -19,20 +19,23 @@ class Chick extends LivingBeing
         $this->sex = $this->henhouse->randomProba($this->henhouse->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->timeBeforeAdult = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getChickToChicken());
 
-        // get the list of all chicks and hen/rooster from the same sex
+        // Get the list of all chicks and hen/rooster from the same sex
         $chickensOrChickOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex);
 
-        // If there is not any room remaining, retrict the list to the hen/rooster and remove one (random or the one with the bigger timer) producing one meat
-        if ($chickensOrChickOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
-            // todo : bug if empty
+        // If there is not any room remaining, retrict the list to the hen/rooster and
+        // - remove one if possible (random or the one with the bigger timer) producing one meat
+        // - do nothing if there are only chicks, and the next one to grow up will be removed
+        if ($chickensOrChickOfSameSex->count() >= (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
             $chickensOfSameSex = $chickensOrChickOfSameSex->filter(fn (LivingBeing $l) => TypeEnum::Chicken == $l->getType());
-            if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
-                $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);
-            } else {
-                $chickenToRemove = $chickensOfSameSex->reduce(fn (?LivingBeing $max, LivingBeing $l) => null === $max || $l->getTimer() > $max->getTimer() ? $l : $max);
+            if ($chickensOfSameSex->count() > 0) {
+                if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
+                    $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);
+                } else {
+                    $chickenToRemove = $chickensOfSameSex->reduce(fn (?LivingBeing $max, LivingBeing $l) => null === $max || $l->getTimer() > $max->getTimer() ? $l : $max);
+                }
+                $this->henhouse->producedMeat++;
+                $this->henhouse->livingBeings->removeElement($chickenToRemove);
             }
-            $this->henhouse->producedMeat++;
-            $this->henhouse->livingBeings->removeElement($chickenToRemove);
         }
 
         // Add the chick to the pool

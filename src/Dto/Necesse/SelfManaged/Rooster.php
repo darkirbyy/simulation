@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\SelfManaged;
 
+use App\Enum\Necesse\ReplaceModeEnum;
 use App\Enum\Necesse\SexEnum;
 use App\Enum\Necesse\TypeEnum;
 
@@ -16,6 +17,19 @@ class Rooster extends LivingBeing
         // At the beginning, the rooster can directly fertilized an hen, then add the rooster to the pool
         $this->timeBeforeFertilize = 1;
         $this->henhouse->livingBeings->add($this);
+
+        // If there is a surplus of male (hen or male chick), remove a rooster (random or the one with the bigger timer)
+        // Careful : surplus of +1 is okay because at this point, the chick giving this rooster is still present in the pool
+        if ($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => SexEnum::Male == $l->getSex())->count() >= $this->henhouse->sim->getLimitRooster() + 2) {
+            $roosters = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Rooster);
+            if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
+                $roosterToRemove = $this->henhouse->randomElement($roosters);
+            } else {
+                $roosterToRemove = $roosters->reduce(fn (?LivingBeing $max, LivingBeing $l) => null === $max || $l->getTimer() > $max->getTimer() ? $l : $max);
+            }
+            $this->henhouse->producedMeat++;
+            $this->henhouse->livingBeings->removeElement($roosterToRemove);
+        }
     }
 
     public function tick(): void

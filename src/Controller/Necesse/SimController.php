@@ -61,10 +61,13 @@ class SimController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
-    public function show(Sim $sim): Response
+    public function show(Sim $sim, SimManager $simManager): Response
     {
+        $fixedBars = $simManager->interpolateBars($sim, 101);
+
         return $this->render('necesse/sim/show.html.twig', [
             'sim' => $sim,
+            'fixedBars' => $fixedBars,
         ]);
     }
 

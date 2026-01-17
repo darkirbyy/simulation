@@ -6,6 +6,7 @@ namespace App\Service\Necesse;
 
 use App\Entity\Necesse\Bar;
 use App\Entity\Necesse\Sim;
+use Doctrine\Common\Collections\ArrayCollection;
 use Random\Engine\Xoshiro256StarStar;
 use Random\Randomizer;
 
@@ -51,6 +52,28 @@ class SimManager
         $memoryAfter = memory_get_usage();
         $sim->setDuration($stopTime - $startTime);
         $sim->setMemory($memoryAfter - $memoryBefore);
+    }
+
+    public function interpolateBars(Sim $sim, int $nbPoints): ArrayCollection
+    {
+        $fixedDeltaTime = $sim->getTime() / ($nbPoints - 1);
+        $fixedBars = new ArrayCollection();
+
+        $currentBar = $sim->getBars()->first();
+        $nextBar = $sim->getBars()->next();
+
+        for ($fixedTime = 0; $fixedTime <= $sim->getTime(); $fixedTime += $fixedDeltaTime) {
+            while ($nextBar && $nextBar->getTime() <= $fixedTime) {
+                $currentBar = $nextBar;
+                $nextBar = $sim->getBars()->next();
+            }
+            $fixedBar = clone $currentBar;
+            $fixedBar->setTime($fixedTime);
+            $fixedBar->setSim(null);
+            $fixedBars->add($fixedBar);
+        }
+
+        return $fixedBars;
     }
 
     /**
