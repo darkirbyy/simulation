@@ -154,10 +154,27 @@
       <div id="sim-accordion-charts" class="accordion-collapse collapse show">
         <div class="accordion-body">
           {% set labels = sim.bars|map(b => mn.display_seconds(b.time)) %}
-          {% set dataEgg = sim.bars|map(b => b.producedEgg) %}
-          {% set dataMeat = sim.bars|map(b => b.producedMeat) %}
-          {% set datasets = [{ label: 'Oeufs', data: dataEgg }, { label: 'Viande', data: dataMeat }] %}
-          <canvas {{ stimulus_controller('draw-chart', { title: 'Production au cours du temps', labels: labels, datasets: datasets }) }}></canvas>
+
+          <div>
+            {% set dataEgg = sim.bars|map(b => b.producedEgg) %}
+            {% set dataMeat = sim.bars|map(b => b.producedMeat) %}
+            {% set datasets = [{ label: 'Oeufs', data: dataEgg }, { label: 'Viande', data: dataMeat }] %}
+            <canvas {{ stimulus_controller('draw-chart', { title: 'Production au cours du temps', labels: labels, datasets: datasets }) }}></canvas>
+          </div>
+
+          <div class="mt-2">
+            {% set dataLivingEgg = sim.bars|map(b => b.livingEgg) %}
+            {% set dataLivingChick = sim.bars|map(b => b.livingChickMale + b.livingChickFemale) %}
+            {% set dataLivingHen = sim.bars|map(b => b.livingHenFertilized + b.livingHenVirgo) %}
+            {% set dataLivingRooster = sim.bars|map(b => b.livingRooster) %}
+            {% set datasets = [
+              { label: 'Oeufs', data: dataLivingEgg },
+              { label: 'Poussins', data: dataLivingChick },
+              { label: 'Poules', data: dataLivingHen },
+              { label: 'Coqs', data: dataLivingRooster },
+            ] %}
+            <canvas {{ stimulus_controller('draw-chart', { title: 'Êtres vivants au cours du temps', labels: labels, datasets: datasets }) }}></canvas>
+          </div>
         </div>
       </div>
     </div>

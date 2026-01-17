@@ -24,6 +24,7 @@ class Chick extends LivingBeing
 
         // If there is not any room remaining, retrict the list to the hen/rooster and remove one (random or the one with the bigger timer) producing one meat
         if ($chickensOrChickOfSameSex->count() === (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
+            // todo : bug if empty
             $chickensOfSameSex = $chickensOrChickOfSameSex->filter(fn (LivingBeing $l) => TypeEnum::Chicken == $l->getType());
             if (ReplaceModeEnum::Random == $this->henhouse->sim->getWorld()->getReplaceMode()) {
                 $chickenToRemove = $this->henhouse->randomElement($chickensOfSameSex);

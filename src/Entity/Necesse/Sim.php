@@ -95,7 +95,7 @@ class Sim
         $this->limitRooster = 10;
         $this->limitNest = 10;
         $this->seed = rand(0, 2 ** 32);
-        $this->time = 3600;
+        $this->time = 18000;
 
         return $this;
     }
