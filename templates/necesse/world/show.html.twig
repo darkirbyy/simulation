@@ -95,6 +95,7 @@
           <table class="mt-2 table table-striped table-hover">
             <thead>
               <tr>
+                <th class="align-center" scope="col">Algorithme</th>
                 <th class="align-center" scope="col">Date</th>
                 <th class="align-center" scope="col">Temps d'exécution</th>
                 <th class="align-center" scope="col">Mémoire consommée</th>
@@ -105,6 +106,7 @@
             <tbody class="table-group-divider">
               {% for sim in world.sims %}
                 <tr>
+                  <td>{{ sim.run|trans }}</td>
                   <td>{{ sim.date|format_datetime('medium', 'medium') }}</td>
                   <td>{{ mn.display_microseconds(sim.duration) }}</td>
                   <td>{{ mn.display_memory(sim.memory) }}</td>

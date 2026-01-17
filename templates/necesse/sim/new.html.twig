@@ -9,6 +9,9 @@
   <h5 class="mb-1">Paramètres globaux</h5>
   <div class="d-flex gap-2 mb-3">
     {{ form_row(form.world) }}
+    {{ form_row(form.run) }}
+  </div>
+  <div class="d-flex gap-2 mb-3">
     {{ form_row(form.time) }}
     {{ form_row(form.seed) }}
   </div>
@@ -16,17 +19,14 @@
   <div class="d-flex gap-2 mb-3">
     {{ form_row(form.initialHen) }}
     {{ form_row(form.initialRooster) }}
-    <div class="app-necesse-w-33"></div>
   </div>
   <h5 class="mb-1">Paramètres limites</h5>
   <div class="d-flex gap-2 mb-3">
     {{ form_row(form.limitHen) }}
     {{ form_row(form.limitRooster) }}
-    {{ form_row(form.limitNest) }}
   </div>
-  <h5 class="mb-1">Autres</h5>
   <div class="d-flex gap-2 mb-3">
-    {{ form_row(form.run) }}
+    {{ form_row(form.limitNest) }}
   </div>
   {{ form_end(form) }}
 {% endblock %}

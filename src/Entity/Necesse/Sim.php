@@ -104,6 +104,7 @@ class Sim
         $this->limitNest = 10;
         $this->seed = rand(0, 2 ** 32);
         $this->time = 18000;
+        $this->run = RunEnum::SelfManaged;
 
         return $this;
     }
