@@ -7,12 +7,14 @@ namespace App\Service\Necesse;
 use App\Entity\Necesse\Bar;
 use App\Entity\Necesse\Sim;
 use Doctrine\Common\Collections\ArrayCollection;
+use Psr\Container\ContainerInterface;
 use Random\Engine\Xoshiro256StarStar;
 use Random\Randomizer;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 
 class SimManager
 {
-    public function __construct(private RunSelfManaged $run)
+    public function __construct(#[AutowireLocator([RunSelfManaged::class, RunTest::class])] private ContainerInterface $runs)
     {
     }
 
@@ -24,20 +26,23 @@ class SimManager
      */
     public function calculateBars(Sim $sim): void
     {
-        // Initialize the date and randomizer, and prepare the time and memory count
-        $sim->setDate(new \DateTime());
+        // Choose the right run and start the random engine
+        $run = $this->runs->get(RunSelfManaged::class);
         $randomizer = new Randomizer(new Xoshiro256StarStar($sim->getSeed()));
+
+        // Initialize the run indicators
+        $sim->setDate(new \DateTime());
         $memoryBefore = memory_get_usage();
         $startTime = microtime(true);
 
         // Start the runner and store the first bar
-        $bar = $this->run->start($sim, $randomizer);
+        $bar = $run->start($sim, $randomizer);
         $sim->addBar($bar);
         $previousBar = $bar;
 
         // For each step in the simulation, update the runner and store the bar if it differs from the previous one
         for ($time = 1; $time <= $sim->getTime(); $time++) {
-            $bar = $this->run->update($time);
+            $bar = $run->update($time);
             if ($this->areBarsDifferent($bar, $previousBar) || $time === $sim->getTime()) {
                 $sim->addBar($bar);
                 $previousBar = $bar;
@@ -45,15 +50,21 @@ class SimManager
         }
 
         // Stop the runner
-        $this->run->stop();
+        $run->stop();
 
-        // Count the time and memory and put them in the sim results
+        // Finish the indicator
         $stopTime = microtime(true);
         $memoryAfter = memory_get_usage();
         $sim->setDuration($stopTime - $startTime);
         $sim->setMemory($memoryAfter - $memoryBefore);
     }
 
+    /**
+     * Recalculate the bars with a fixed number of points and uniform repartition.
+     *
+     * @param Sim $sim      simulation parameter
+     * @param int $nbPoints how many points to interpolate
+     */
     public function interpolateBars(Sim $sim, int $nbPoints): ArrayCollection
     {
         $fixedDeltaTime = $sim->getTime() / ($nbPoints - 1);
