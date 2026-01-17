@@ -144,6 +144,33 @@
           class="accordion-button fs-5 text-black"
           type="button"
           data-bs-toggle="collapse"
+          data-bs-target="#sim-accordion-charts"
+          aria-expanded="true"
+          aria-controls="sim-accordion-charts"
+        >
+          Graphiques
+        </button>
+      </h2>
+      <div id="sim-accordion-charts" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+          {% set labels = sim.bars|map(b => mn.display_seconds(b.time)) %}
+          {% set dataEgg = sim.bars|map(b => b.producedEgg) %}
+          {% set dataMeat = sim.bars|map(b => b.producedMeat) %}
+          {% set datasets = [{ label: 'Oeufs', data: dataEgg }, { label: 'Viande', data: dataMeat }] %}
+          <canvas {{ stimulus_controller('draw-chart', { title: 'Production au cours du temps', labels: labels, datasets: datasets }) }}></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion mt-3">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          data-turbo="false"
+          class="accordion-button fs-5 text-black"
+          type="button"
+          data-bs-toggle="collapse"
           data-bs-target="#sim-accordion-results"
           aria-expanded="true"
           aria-controls="sim-accordion-results"
