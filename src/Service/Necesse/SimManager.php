@@ -27,7 +27,7 @@ class SimManager
     public function calculateBars(Sim $sim): void
     {
         // Choose the right run and start the random engine
-        $run = $this->runs->get(RunSelfManaged::class);
+        $run = $this->runs->get($sim->getRun()->toClass());
         $randomizer = new Randomizer(new Xoshiro256StarStar($sim->getSeed()));
 
         // Initialize the run indicators
