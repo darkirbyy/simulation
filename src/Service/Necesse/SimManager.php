@@ -34,19 +34,24 @@ class SimManager
         $sim->setDate(new \DateTime());
         $memoryBefore = memory_get_usage();
         $startTime = microtime(true);
+        $iteration = -1;
 
-        // Start the runner and store the first bar
-        $bar = $run->start($sim, $randomizer);
-        $sim->addBar($bar);
-        $previousBar = $bar;
+        // Start the runner
+        $run->start($sim, $randomizer);
+        $previousBar = null;
 
+        $time = 0;
+        $deltaTime = 0;
         // For each step in the simulation, update the runner and store the bar if it differs from the previous one
-        for ($time = 1; $time <= $sim->getTime(); $time++) {
-            $bar = $run->update($time);
-            if ($this->areBarsDifferent($bar, $previousBar) || $time === $sim->getTime()) {
+        while ($time <= $sim->getTime()) {
+            [$bar, $deltaTime] = $run->update($deltaTime);
+            if ($this->areBarsDifferent($bar, $previousBar)) {
+                $bar->setTime($time);
                 $sim->addBar($bar);
                 $previousBar = $bar;
             }
+            $iteration++;
+            $time += $deltaTime;
         }
 
         // Stop the runner
@@ -57,6 +62,7 @@ class SimManager
         $memoryAfter = memory_get_usage();
         $sim->setDuration($stopTime - $startTime);
         $sim->setMemory($memoryAfter - $memoryBefore);
+        $sim->setIteration($iteration);
     }
 
     /**
@@ -90,9 +96,10 @@ class SimManager
     /**
      * Check if two bars are different by checking all values but the time.
      */
-    private function areBarsDifferent(Bar $bar1, Bar $bar2): bool
+    private function areBarsDifferent(Bar $bar1, ?Bar $bar2): bool
     {
-        return $bar1->getProducedEgg() != $bar2->getProducedEgg()
+        return null === $bar2
+            || $bar1->getProducedEgg() != $bar2->getProducedEgg()
             || $bar1->getProducedMeat() != $bar2->getProducedMeat()
             || $bar1->getLivingEgg() != $bar2->getLivingEgg()
             || $bar1->getLivingChickFemale() != $bar2->getLivingChickFemale()

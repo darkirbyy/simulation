@@ -23,7 +23,7 @@ class RunSelfManaged implements RunInterface
     {
     }
 
-    public function start(Sim $sim, Randomizer $randomizer): Bar
+    public function start(Sim $sim, Randomizer $randomizer): void
     {
         // Initialize the henhouse with sim params, the randomizer, empty pool and 0 products
         $this->henhouse = new Henhouse($sim, $randomizer, new ArrayCollection(), 0, 0);
@@ -37,12 +37,9 @@ class RunSelfManaged implements RunInterface
             $rooster = new Rooster($this->henhouse);
             $rooster->initialize();
         }
-
-        // return the bar corresponding to this initial state
-        return $this->henhouseToBar(0);
     }
 
-    public function update(int $time): Bar
+    public function update(int $deltaTime): array
     {
         // Update the timer of each living being in the pool
         foreach ($this->henhouse->livingBeings as $livingBeing) {
@@ -50,7 +47,7 @@ class RunSelfManaged implements RunInterface
         }
 
         // return the bar corresponding to the current state
-        return $this->henhouseToBar($time);
+        return [$this->henhouseToBar(), 1];
     }
 
     public function stop(): void
@@ -61,10 +58,9 @@ class RunSelfManaged implements RunInterface
     /**
      * Convert the henhouse pool and products count to a bar.
      */
-    private function henhouseToBar(int $time): Bar
+    private function henhouseToBar(): Bar
     {
         $bar = new Bar();
-        $bar->setTime($time);
         $bar->setProducedEgg($this->henhouse->producedEgg);
         $bar->setProducedMeat($this->henhouse->producedMeat);
         $bar->setLivingEgg($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => TypeEnum::Egg == $l->getType())->count());

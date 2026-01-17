@@ -33,6 +33,9 @@ class Sim
     private ?int $memory = null;
 
     #[ORM\Column]
+    private ?int $iteration = null;
+
+    #[ORM\Column]
     #[Assert\NotBlank]
     #[Assert\GreaterThanOrEqual(0)]
     private ?int $initialHen = null;
@@ -141,6 +144,18 @@ class Sim
     public function setMemory(?int $memory): static
     {
         $this->memory = $memory;
+
+        return $this;
+    }
+
+    public function getIteration(): ?int
+    {
+        return $this->iteration;
+    }
+
+    public function setIteration(?int $iteration): static
+    {
+        $this->iteration = $iteration;
 
         return $this;
     }

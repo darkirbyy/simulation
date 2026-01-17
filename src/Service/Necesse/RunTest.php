@@ -10,31 +10,24 @@ use Random\Randomizer;
 
 class RunTest implements RunInterface
 {
+    private int $nbProducedEgg;
+
     public function __construct()
     {
     }
 
-    public function start(Sim $sim, Randomizer $randomizer): Bar
+    public function start(Sim $sim, Randomizer $randomizer): void
     {
-        $bar = new Bar();
-        $bar->setTime(0);
-        $bar->setProducedEgg(0);
-        $bar->setProducedMeat(0);
-        $bar->setLivingEgg(0);
-        $bar->setLivingChickFemale(0);
-        $bar->setLivingChickMale(0);
-        $bar->setLivingHenFertilized(0);
-        $bar->setLivingHenVirgo(0);
-        $bar->setLivingRooster(0);
-
-        return $bar;
+        $this->nbProducedEgg = 0;
     }
 
-    public function update(int $time): Bar
+    public function update(int $deltaTime): array
     {
+        $this->nbProducedEgg += 2;
+
         $bar = new Bar();
-        $bar->setTime($time);
-        $bar->setProducedEgg(0);
+
+        $bar->setProducedEgg($this->nbProducedEgg);
         $bar->setProducedMeat(0);
         $bar->setLivingEgg(0);
         $bar->setLivingChickFemale(0);
@@ -43,7 +36,7 @@ class RunTest implements RunInterface
         $bar->setLivingHenVirgo(0);
         $bar->setLivingRooster(0);
 
-        return $bar;
+        return [$bar, 1800];
     }
 
     public function stop(): void

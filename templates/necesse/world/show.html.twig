@@ -102,6 +102,7 @@
                 <th class="align-center" scope="col">Date</th>
                 <th class="align-center" scope="col">Temps d'exécution</th>
                 <th class="align-center" scope="col">Mémoire consommée</th>
+                <th class="align-center" scope="col">Nombre d'itérations</th>
                 <th class="w-1 text-nowrap text-end align-center" scope="col">Actions</th>
               </tr>
             </thead>
@@ -111,6 +112,8 @@
                   <td>{{ sim.date|format_datetime('medium', 'medium') }}</td>
                   <td>{{ mn.display_microseconds(sim.duration) }}</td>
                   <td>{{ mn.display_memory(sim.memory) }}</td>
+                  <td class="py-2">{{ sim.iteration }}</td>
+
                   <td class="w-1 text-nowrap text-end py-1 align-center">{{ m.show_button(path('necesse_sim_show', { id: sim.id })) }}</td>
                 </tr>
               {% endfor %}
