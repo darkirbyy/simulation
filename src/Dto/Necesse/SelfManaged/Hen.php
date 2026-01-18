@@ -29,11 +29,8 @@ class Hen extends LivingBeing
         }
     }
 
-    public function tick(int $deltaTime): void
+    public function act(): void
     {
-        // Timer before laying an egg
-        $this->timeBeforeLay -= $deltaTime;
-
         if (0 === $this->timeBeforeLay) {
             // When timer hit 0, create an new egg, add it to the pool, and randomize again the timer
             $egg = new Egg($this->henhouse);
@@ -55,6 +52,11 @@ class Hen extends LivingBeing
     public function getTimer(): int
     {
         return $this->timeBeforeLay;
+    }
+
+    public function tickTimer(int $deltaTime): void
+    {
+        $this->timeBeforeLay -= $deltaTime;
     }
 
     public function getFertilized(): bool

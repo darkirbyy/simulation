@@ -38,6 +38,9 @@ class SimType extends AbstractType
                 'label_attr' => [
                     'class' => 'radio-inline',
                 ],
+                'choice_attr' => function ($choice, string $key, mixed $value) {
+                    return RunEnum::Centralized == $choice ? ['disabled' => true] : [];
+                },
             ])
             ->add('time', IntegerType::class, [
                 'label' => 'Durée (en secondes)',

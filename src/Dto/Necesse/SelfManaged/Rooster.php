@@ -26,11 +26,8 @@ class Rooster extends LivingBeing
         }
     }
 
-    public function tick(int $deltaTime): void
+    public function act(): void
     {
-        // Timer before fertilizing another hen
-        $this->timeBeforeFertilize -= $deltaTime;
-
         if (0 === $this->timeBeforeFertilize) {
             // When timer hit 0, choose a random not fertilized hen and fertilized it, or wait one step if none is available
             $hensVirgo = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => !$h->getFertilized());
@@ -38,6 +35,10 @@ class Rooster extends LivingBeing
                 $this->henhouse->randomElement($hensVirgo)->fertilize();
                 $this->timeBeforeFertilize = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getRoosterToFertilize());
             } else {
+                // $femaleChicks = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Chick && $l->getSex() == SexEnum::Female);
+                // $nextFemaleChickToAdult = $femaleChicks->reduce(fn(?LivingBeing $min, LivingBeing $l) => null === $min || $l->getTimer() < $min->getTimer() ? $l : $min);
+                // $nextTimer = min($nextFemaleChickToAdult?->getTimer() ?? PHP_INT_MAX, $this->henhouse->sim->getWorld()->getChickToChicken()->getMin());
+                // $this->timeBeforeFertilize = max($nextTimer, 1);
                 $this->timeBeforeFertilize = 1;
             }
         }
@@ -56,5 +57,10 @@ class Rooster extends LivingBeing
     public function getTimer(): int
     {
         return $this->timeBeforeFertilize;
+    }
+
+    public function tickTimer(int $deltaTime): void
+    {
+        $this->timeBeforeFertilize -= $deltaTime;
     }
 }

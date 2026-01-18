@@ -27,6 +27,7 @@ class SimManager
     public function calculateBars(Sim $sim): void
     {
         // Choose the right run and start the random engine
+        set_time_limit(300);
         $run = $this->runs->get($sim->getRun()->toClass());
         $randomizer = new Randomizer(new Xoshiro256StarStar($sim->getSeed()));
 

@@ -204,7 +204,7 @@
       </h2>
       <div id="sim-accordion-results" class="accordion-collapse collapse show">
         <div class="accordion-body">
-          <turbo-frame id="sim-turbo-results">
+          {{ sim.bars|length }} enregistrements<turbo-frame id="sim-turbo-results">
             <a href="{{ path('necesse_sim_results', { id: sim.id }) }}" class="my-2 btn btn-outline-secondary">Afficher les résultats</a>
           </turbo-frame>
         </div>

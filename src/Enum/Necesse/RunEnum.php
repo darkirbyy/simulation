@@ -17,7 +17,7 @@ enum RunEnum: string implements TranslatableInterface
     public function trans(TranslatorInterface $trans, ?string $locale = null): string
     {
         return match ($this) {
-            self::SelfManaged => 'Auto-managé',
+            self::SelfManaged => 'Auto-géré',
             self::Centralized => 'Centralisé',
         };
     }

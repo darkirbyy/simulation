@@ -27,11 +27,8 @@ class Egg extends LivingBeing
         }
     }
 
-    public function tick(int $deltaTime): void
+    public function act(): void
     {
-        // Time before hatching
-        $this->timeBeforeHatch -= $deltaTime;
-
         if (0 === $this->timeBeforeHatch) {
             // When timer hit 0, create a new chick, add it to the pool and remove the egg from the pool
             $chick = new Chick($this->henhouse);
@@ -53,5 +50,10 @@ class Egg extends LivingBeing
     public function getTimer(): int
     {
         return $this->timeBeforeHatch;
+    }
+
+    public function tickTimer(int $deltaTime): void
+    {
+        $this->timeBeforeHatch -= $deltaTime;
     }
 }

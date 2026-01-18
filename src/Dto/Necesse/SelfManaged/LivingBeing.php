@@ -31,7 +31,7 @@ abstract class LivingBeing
     /**
      * Called to advance the simulation of $deltaTime steps.
      */
-    abstract public function tick(int $deltaTime): void;
+    abstract public function act(): void;
 
     /**
      * Determine the sex of the living being.
@@ -44,7 +44,12 @@ abstract class LivingBeing
     abstract public function getType(): TypeEnum;
 
     /**
-     * Determine how much iteration between something will change for this libing being.
+     * Determine how much iteration between something will change for this living being.
      */
     abstract public function getTimer(): int;
+
+    /**
+     * Move the simulation $deltaTime iteration.
+     */
+    abstract public function tickTimer(int $deltaTime): void;
 }
