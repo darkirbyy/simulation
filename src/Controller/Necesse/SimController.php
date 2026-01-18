@@ -31,7 +31,7 @@ class SimController extends AbstractController
     }
 
     #[Route('/new/{id?}', name: 'new', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function new(?Sim $sim = null, Request $request, FormManager $fm, SimManager $simManager): Response
+    public function new(?Sim $sim, Request $request, FormManager $fm, SimManager $simManager): Response
     {
         if (!is_null($sim)) {
             $sim = clone $sim;

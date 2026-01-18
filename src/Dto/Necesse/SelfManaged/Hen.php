@@ -16,7 +16,6 @@ class Hen extends LivingBeing
     {
         // By default, an hen is not fertilized, and the sex/time before first egg are randomized, then add the hen to the pool
         $this->fertilized = false;
-        $this->sex = $this->henhouse->randomProba($this->henhouse->sim->getWorld()->getEggToFemale()) ? SexEnum::Female : SexEnum::Male;
         $this->timeBeforeLay = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getHenToLay());
         $this->henhouse->livingBeings->add($this);
 
