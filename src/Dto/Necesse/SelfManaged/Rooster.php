@@ -35,11 +35,10 @@ class Rooster extends LivingBeing
                 $this->henhouse->randomElement($hensVirgo)->fertilize();
                 $this->timeBeforeFertilize = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getRoosterToFertilize());
             } else {
-                // $femaleChicks = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Chick && $l->getSex() == SexEnum::Female);
-                // $nextFemaleChickToAdult = $femaleChicks->reduce(fn(?LivingBeing $min, LivingBeing $l) => null === $min || $l->getTimer() < $min->getTimer() ? $l : $min);
-                // $nextTimer = min($nextFemaleChickToAdult?->getTimer() ?? PHP_INT_MAX, $this->henhouse->sim->getWorld()->getChickToChicken()->getMin());
-                // $this->timeBeforeFertilize = max($nextTimer, 1);
-                $this->timeBeforeFertilize = 1;
+                $femaleChicks = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Chick && SexEnum::Female == $l->getSex());
+                $nextFemaleChickToAdult = $femaleChicks->reduce(fn (?LivingBeing $min, LivingBeing $l) => null === $min || $l->getTimer() < $min->getTimer() ? $l : $min);
+                $nextTimer = min($nextFemaleChickToAdult?->getTimer() ?? PHP_INT_MAX, $this->henhouse->sim->getWorld()->getChickToChicken()->getMin());
+                $this->timeBeforeFertilize = max($nextTimer, 1);
             }
         }
     }

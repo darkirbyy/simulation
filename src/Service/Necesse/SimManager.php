@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 
 class SimManager
 {
-    public function __construct(#[AutowireLocator([RunSelfManaged::class, RunTest::class])] private ContainerInterface $runs)
+    public function __construct(#[AutowireLocator([RunSelfManaged::class, RunCentralized::class])] private ContainerInterface $runs)
     {
     }
 
