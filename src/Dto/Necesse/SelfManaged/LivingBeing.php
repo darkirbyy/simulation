@@ -17,9 +17,7 @@ abstract class LivingBeing
      *
      * @param Henhouse $henhouse the henhouse containing all the sim parameters the randomizer
      */
-    public function __construct(protected Henhouse $henhouse)
-    {
-    }
+    public function __construct(protected Henhouse $henhouse) {}
 
     /**
      * Called once when the living being is created.

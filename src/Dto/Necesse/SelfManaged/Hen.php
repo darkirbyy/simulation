@@ -21,8 +21,8 @@ class Hen extends LivingBeing
 
         // If there is a surplus of female (hen or female chick), remove a hen (random or the one with the bigger timer)
         // Careful : surplus of +1 is okay because at this point, the chick giving this hen is still present in the pool
-        if ($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => SexEnum::Female == $l->getSex())->count() >= $this->henhouse->sim->getLimitHen() + 2) {
-            $hens = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen);
+        if ($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => SexEnum::Female == $l->getSex())->count() >= $this->henhouse->sim->getLimitHen() + 2) {
+            $hens = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Hen);
             $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($hens));
             $this->henhouse->producedMeat++;
         }

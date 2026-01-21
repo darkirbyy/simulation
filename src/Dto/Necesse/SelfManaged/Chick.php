@@ -19,13 +19,13 @@ class Chick extends LivingBeing
         $this->timeBeforeAdult = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getChickToChicken());
 
         // Get the list of all chicks and hen/rooster from the same sex
-        $chickensOrChickOfSameSex = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l->getSex() === $this->sex);
+        $chickensOrChickOfSameSex = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l->getSex() === $this->sex);
 
         // If there is not any room remaining, retrict the list to the hen/rooster and
         // - remove one if possible (random or the one with the bigger timer) producing one meat
         // - do nothing if there are only chicks, and the next one to grow up will be removed
         if ($chickensOrChickOfSameSex->count() >= (SexEnum::Female == $this->sex ? $this->henhouse->sim->getLimitHen() : $this->henhouse->sim->getLimitRooster())) {
-            $chickensOfSameSex = $chickensOrChickOfSameSex->filter(fn (LivingBeing $l) => TypeEnum::Chicken == $l->getType());
+            $chickensOfSameSex = $chickensOrChickOfSameSex->filter(fn(LivingBeing $l) => TypeEnum::Chicken == $l->getType());
             if ($chickensOfSameSex->count() > 0) {
                 $this->henhouse->producedMeat++;
                 $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($chickensOfSameSex));

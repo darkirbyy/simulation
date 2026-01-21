@@ -14,9 +14,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 
 class SimManager
 {
-    public function __construct(#[AutowireLocator([RunSelfManaged::class, RunCentralized::class])] private ContainerInterface $runs)
-    {
-    }
+    public function __construct(#[AutowireLocator([RunSelfManaged::class, RunCentralized::class])] private ContainerInterface $runs) {}
 
     /**
      * Get a valide set of simulation arameters and calculate all bars usng a runner.
@@ -99,14 +97,14 @@ class SimManager
      */
     private function areBarsDifferent(Bar $bar1, ?Bar $bar2): bool
     {
-        return null === $bar2
-            || $bar1->getProducedEgg() != $bar2->getProducedEgg()
-            || $bar1->getProducedMeat() != $bar2->getProducedMeat()
-            || $bar1->getLivingEgg() != $bar2->getLivingEgg()
-            || $bar1->getLivingChickFemale() != $bar2->getLivingChickFemale()
-            || $bar1->getLivingChickMale() != $bar2->getLivingChickMale()
-            || $bar1->getLivingHenFertilized() != $bar2->getLivingHenFertilized()
-            || $bar1->getLivingHenVirgo() != $bar2->getLivingHenVirgo()
-            || $bar1->getLivingRooster() != $bar2->getLivingRooster();
+        return null === $bar2 ||
+            $bar1->getProducedEgg() != $bar2->getProducedEgg() ||
+            $bar1->getProducedMeat() != $bar2->getProducedMeat() ||
+            $bar1->getLivingEgg() != $bar2->getLivingEgg() ||
+            $bar1->getLivingChickFemale() != $bar2->getLivingChickFemale() ||
+            $bar1->getLivingChickMale() != $bar2->getLivingChickMale() ||
+            $bar1->getLivingHenFertilized() != $bar2->getLivingHenFertilized() ||
+            $bar1->getLivingHenVirgo() != $bar2->getLivingHenVirgo() ||
+            $bar1->getLivingRooster() != $bar2->getLivingRooster();
     }
 }

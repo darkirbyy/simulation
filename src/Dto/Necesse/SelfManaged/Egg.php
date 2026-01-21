@@ -17,7 +17,7 @@ class Egg extends LivingBeing
         $fertilized = $args[0];
 
         // If not fertilized or if there is not any nest remaining, the egg is directly counted as a product
-        if (!$fertilized || $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Egg)->count() >= $this->henhouse->sim->getLimitNest()) {
+        if (!$fertilized || $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Egg)->count() >= $this->henhouse->sim->getLimitNest()) {
             $this->henhouse->producedEgg++;
         }
         // Else, randomize the timer for hatching and add the egg to the pool

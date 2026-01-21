@@ -22,9 +22,7 @@ class Henhouse
      * @param int             $producedEgg  number of egg products
      * @param int             $producedMeat number of meat products
      */
-    public function __construct(public Sim $sim, public Randomizer $randomizer, public ArrayCollection $livingBeings, public int $producedEgg, public int $producedMeat)
-    {
-    }
+    public function __construct(public Sim $sim, public Randomizer $randomizer, public ArrayCollection $livingBeings, public int $producedEgg, public int $producedMeat) {}
 
     /**
      * Randomize an int between a max and a min.

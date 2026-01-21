@@ -19,8 +19,8 @@ class Rooster extends LivingBeing
 
         // If there is a surplus of male (hen or male chick), remove a rooster (random or the one with the bigger timer)
         // Careful : surplus of +1 is okay because at this point, the chick giving this rooster is still present in the pool
-        if ($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => SexEnum::Male == $l->getSex())->count() >= $this->henhouse->sim->getLimitRooster() + 2) {
-            $roosters = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Rooster);
+        if ($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => SexEnum::Male == $l->getSex())->count() >= $this->henhouse->sim->getLimitRooster() + 2) {
+            $roosters = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Rooster);
             $this->henhouse->livingBeings->removeElement($this->henhouse->randomElement($roosters));
             $this->henhouse->producedMeat++;
         }
@@ -30,13 +30,13 @@ class Rooster extends LivingBeing
     {
         if (0 === $this->timeBeforeFertilize) {
             // When timer hit 0, choose a random not fertilized hen and fertilized it, or wait one step if none is available
-            $hensVirgo = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => !$h->getFertilized());
+            $hensVirgo = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Hen)->filter(fn(Hen $h) => !$h->getFertilized());
             if ($hensVirgo->count() > 0) {
                 $this->henhouse->randomElement($hensVirgo)->fertilize();
                 $this->timeBeforeFertilize = $this->henhouse->randomBetween($this->henhouse->sim->getWorld()->getRoosterToFertilize());
             } else {
-                $femaleChicks = $this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Chick && SexEnum::Female == $l->getSex());
-                $nextFemaleChickToAdult = $femaleChicks->reduce(fn (?LivingBeing $min, LivingBeing $l) => null === $min || $l->getTimer() < $min->getTimer() ? $l : $min);
+                $femaleChicks = $this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Chick && SexEnum::Female == $l->getSex());
+                $nextFemaleChickToAdult = $femaleChicks->reduce(fn(?LivingBeing $min, LivingBeing $l) => null === $min || $l->getTimer() < $min->getTimer() ? $l : $min);
                 $nextTimer = min($nextFemaleChickToAdult?->getTimer() ?? PHP_INT_MAX, $this->henhouse->sim->getWorld()->getChickToChicken()->getMin());
                 $this->timeBeforeFertilize = max($nextTimer, 1);
             }

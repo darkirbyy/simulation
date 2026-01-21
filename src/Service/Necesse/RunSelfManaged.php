@@ -19,9 +19,7 @@ class RunSelfManaged implements RunInterface
 {
     private Henhouse $henhouse;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function start(Sim $sim, Randomizer $randomizer): void
     {
@@ -74,12 +72,12 @@ class RunSelfManaged implements RunInterface
         $bar = new Bar();
         $bar->setProducedEgg($this->henhouse->producedEgg);
         $bar->setProducedMeat($this->henhouse->producedMeat);
-        $bar->setLivingEgg($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => TypeEnum::Egg == $l->getType())->count());
-        $bar->setLivingChickFemale($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => TypeEnum::Chick == $l->getType() && SexEnum::Female == $l->getSex())->count());
-        $bar->setLivingChickMale($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => TypeEnum::Chick == $l->getType() && SexEnum::Male == $l->getSex())->count());
-        $bar->setLivingHenFertilized($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => $h->getFertilized())->count());
-        $bar->setLivingHenVirgo($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Hen)->filter(fn (Hen $h) => !$h->getFertilized())->count());
-        $bar->setLivingRooster($this->henhouse->livingBeings->filter(fn (LivingBeing $l) => $l instanceof Rooster)->count());
+        $bar->setLivingEgg($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => TypeEnum::Egg == $l->getType())->count());
+        $bar->setLivingChickFemale($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => TypeEnum::Chick == $l->getType() && SexEnum::Female == $l->getSex())->count());
+        $bar->setLivingChickMale($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => TypeEnum::Chick == $l->getType() && SexEnum::Male == $l->getSex())->count());
+        $bar->setLivingHenFertilized($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Hen)->filter(fn(Hen $h) => $h->getFertilized())->count());
+        $bar->setLivingHenVirgo($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Hen)->filter(fn(Hen $h) => !$h->getFertilized())->count());
+        $bar->setLivingRooster($this->henhouse->livingBeings->filter(fn(LivingBeing $l) => $l instanceof Rooster)->count());
 
         return $bar;
     }

@@ -10,13 +10,9 @@ use Random\Randomizer;
 
 class RunCentralized implements RunInterface
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
-    public function start(Sim $sim, Randomizer $randomizer): void
-    {
-    }
+    public function start(Sim $sim, Randomizer $randomizer): void {}
 
     public function update(int $deltaTime): array
     {
@@ -25,7 +21,5 @@ class RunCentralized implements RunInterface
         return [$bar, 1800];
     }
 
-    public function stop(): void
-    {
-    }
+    public function stop(): void {}
 }

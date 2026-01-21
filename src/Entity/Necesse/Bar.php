@@ -57,9 +57,7 @@ class Bar
     // Custom methods and validation constraints ///////////
     // /////////////////////////////////////////////////////
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     // /////////////////////////////////////////////////////
     // Doctrine auto-generated getter and setter ///////////
