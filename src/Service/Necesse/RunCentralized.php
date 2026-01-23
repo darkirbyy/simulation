@@ -26,7 +26,16 @@ class RunCentralized implements RunInterface
 
     public function update(int $deltaTime): array
     {
-        return [$this->henhouseToBar(), 1];
+        // Update the timer of each type of living beings
+        $this->henhouse->tickTimersArray($deltaTime);
+
+        $this->henhouse->dueTimersArray();
+
+        // Calculate next timer as the min of all timers of each type of living beings
+        $nextDeltaTime = $this->henhouse->minTimersArray();
+
+        // return the bar corresponding to the current state
+        return [$this->henhouseToBar(), $nextDeltaTime];
     }
 
     public function stop(): void

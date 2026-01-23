@@ -51,11 +51,119 @@ class Henhouse
     }
 
     /**
+     * Tick the timers of each type of living being.
+     */
+    public function tickTimersArray(int $deltaTime): void
+    {
+        $this->eggs->tickTimers($deltaTime);
+        $this->chicksFemale->tickTimers($deltaTime);
+        $this->chicksMale->tickTimers($deltaTime);
+        $this->hensFertilized->tickTimers($deltaTime);
+        $this->hensVirgo->tickTimers($deltaTime);
+        $this->roosters->tickTimers($deltaTime);
+    }
+
+    /**
+     * Main logic, defining the behavior of each type of living being when the timer hit 0.
+     */
+    public function dueTimersArray(): void
+    {
+        foreach ($this->eggs->dueTimersIndexes() as $i) {
+            $this->eggs->removeTimer($i);
+            if ($this->randomProba($this->sim->getWorld()->getEggToFemale())) {
+                if ($this->chicksFemale->addTimer($this->randomBetween($this->sim->getWorld()->getChickToChicken()))) {
+                    if (
+                        $this->chicksFemale->active + $this->hensVirgo->active + $this->hensFertilized->active > $this->sim->getLimitHen() &&
+                        $this->hensVirgo->active + $this->hensFertilized->active > 0
+                    ) {
+                        $randomHen = $this->randomBetween((new MinMax())->setMin(1)->setMax($this->hensVirgo->active + $this->hensFertilized->active));
+                        if ($randomHen <= $this->hensVirgo->active) {
+                            $this->hensVirgo->removeTimer($this->randomElement($this->hensVirgo->activeTimersIndexes()));
+                        } else {
+                            $this->hensFertilized->removeTimer($this->randomElement($this->hensFertilized->activeTimersIndexes()));
+                        }
+                    }
+                }
+            } else {
+                if ($this->chicksMale->addTimer($this->randomBetween($this->sim->getWorld()->getChickToChicken()))) {
+                    if ($this->chicksMale->active + $this->roosters->active > $this->sim->getLimitRooster() && $this->roosters->active > 0) {
+                        $this->roosters->removeTimer($this->randomElement($this->roosters->activeTimersIndexes()));
+                    }
+                }
+            }
+        }
+
+        foreach ($this->chicksFemale->dueTimersIndexes() as $i) {
+            $this->chicksFemale->removeTimer($i);
+            $this->hensVirgo->addTimer($this->randomBetween($this->sim->getWorld()->getHenToLay()));
+            if ($this->chicksFemale->active + $this->hensVirgo->active + $this->hensFertilized->active > $this->sim->getLimitHen()) {
+                $randomHen = $this->randomBetween((new MinMax())->setMin(1)->setMax($this->hensVirgo->active + $this->hensFertilized->active));
+                if ($randomHen <= $this->hensVirgo->active) {
+                    $this->hensVirgo->removeTimer($this->randomElement($this->hensVirgo->activeTimersIndexes()));
+                } else {
+                    $this->hensFertilized->removeTimer($this->randomElement($this->hensFertilized->activeTimersIndexes()));
+                }
+            }
+        }
+
+        foreach ($this->chicksMale->dueTimersIndexes() as $i) {
+            $this->chicksMale->removeTimer($i);
+            $this->roosters->addTimer(1);
+            if ($this->chicksMale->active + $this->roosters->active > $this->sim->getLimitRooster()) {
+                $this->roosters->removeTimer($this->randomElement($this->roosters->activeTimersIndexes()));
+            }
+        }
+
+        foreach ($this->hensVirgo->dueTimersIndexes() as $i) {
+            $this->hensVirgo->removeTimer($i);
+            $this->hensVirgo->addTimer($this->randomBetween($this->sim->getWorld()->getHenToLay()));
+            $this->producedEgg++;
+        }
+
+        foreach ($this->hensFertilized->dueTimersIndexes() as $i) {
+            $this->hensFertilized->removeTimer($i);
+            $this->hensFertilized->addTimer($this->randomBetween($this->sim->getWorld()->getHenToLay()));
+            if (!$this->eggs->addTimer($this->randomBetween($this->sim->getWorld()->getEggToChick()))) {
+                $this->producedEgg++;
+            }
+        }
+
+        foreach ($this->roosters->dueTimersIndexes() as $i) {
+            if ($this->hensVirgo->active > 0) {
+                $randomIndex = $this->randomElement($this->hensVirgo->activeTimersIndexes());
+                $this->hensFertilized->addTimer($this->hensVirgo[$randomIndex]);
+                $this->hensVirgo->removeTimer($randomIndex);
+                $this->roosters->removeTimer($i);
+                $this->roosters->addTimer($this->randomBetween($this->sim->getWorld()->getRoosterToFertilize()));
+            } else {
+                $this->roosters->removeTimer($i);
+                $newTimer = min($this->chicksFemale->minTimers(), $this->sim->getWorld()->getEggToChick()->getMin());
+                $this->roosters->addTimer(max($newTimer, 1));
+            }
+        }
+    }
+
+    /**
+     * Get the min timer of each type of living being.
+     */
+    public function minTimersArray(): int
+    {
+        $minEggs = $this->eggs->minTimers();
+        $minChicksFemale = $this->chicksFemale->minTimers();
+        $minChicksMale = $this->chicksMale->minTimers();
+        $minHensFertilized = $this->hensFertilized->minTimers();
+        $minHensVirgo = $this->hensVirgo->minTimers();
+        $minrRoosters = $this->roosters->minTimers();
+
+        return min($minEggs, $minChicksFemale, $minChicksMale, $minHensFertilized, $minHensVirgo, $minrRoosters);
+    }
+
+    /**
      * Randomize an int between a max and a min.
      *
      * @param MinMax $minMax the boundaries
      */
-    public function randomBetween(MinMax $minMax): int
+    private function randomBetween(MinMax $minMax): int
     {
         return $this->randomizer->getInt($minMax->getMin(), $minMax->getMax());
     }
@@ -65,7 +173,7 @@ class Henhouse
      *
      * @param float $proba probability of true
      */
-    public function randomProba(float $proba): bool
+    private function randomProba(float $proba): bool
     {
         return $this->randomizer->getFloat(0, 1, IntervalBoundary::ClosedClosed) <= $proba;
     }
@@ -75,7 +183,7 @@ class Henhouse
      *
      * @param ArrayCollection $array array to pull an element from
      */
-    public function randomElement(array $array): int
+    private function randomElement(array $array): int
     {
         return $array[$this->randomizer->getInt(0, count($array) - 1)];
     }

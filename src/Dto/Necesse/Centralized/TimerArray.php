@@ -60,6 +60,32 @@ class TimerArray
         return false;
     }
 
+    public function dueTimersIndexes(): array
+    {
+        // return all timers index that must act (timer = 0)
+        $is = [];
+        for ($i = 0; $i < $this->fixedArray->getSize(); $i++) {
+            if (0 == $this->fixedArray[$i]) {
+                $is[] = $i;
+            }
+        }
+
+        return $is;
+    }
+
+    public function activeTimersIndexes(): array
+    {
+        // return all timers indexes that are active (timer >= 0)
+        $is = [];
+        for ($i = 0; $i < $this->fixedArray->getSize(); $i++) {
+            if ($this->fixedArray[$i] >= 0) {
+                $is[] = $i;
+            }
+        }
+
+        return $is;
+    }
+
     public function removeTimer(int $i): void
     {
         // Remove a timer by its index (by setting it to -1)
