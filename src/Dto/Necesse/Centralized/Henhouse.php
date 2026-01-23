@@ -82,12 +82,14 @@ class Henhouse
                         } else {
                             $this->hensFertilized->removeTimer($this->randomElement($this->hensFertilized->activeTimersIndexes()));
                         }
+                        $this->producedMeat++;
                     }
                 }
             } else {
                 if ($this->chicksMale->addTimer($this->randomBetween($this->sim->getWorld()->getChickToChicken()))) {
                     if ($this->chicksMale->active + $this->roosters->active > $this->sim->getLimitRooster() && $this->roosters->active > 0) {
                         $this->roosters->removeTimer($this->randomElement($this->roosters->activeTimersIndexes()));
+                        $this->producedMeat++;
                     }
                 }
             }
@@ -103,6 +105,7 @@ class Henhouse
                 } else {
                     $this->hensFertilized->removeTimer($this->randomElement($this->hensFertilized->activeTimersIndexes()));
                 }
+                $this->producedMeat++;
             }
         }
 
@@ -111,6 +114,7 @@ class Henhouse
             $this->roosters->addTimer(1);
             if ($this->chicksMale->active + $this->roosters->active > $this->sim->getLimitRooster()) {
                 $this->roosters->removeTimer($this->randomElement($this->roosters->activeTimersIndexes()));
+                $this->producedMeat++;
             }
         }
 
@@ -131,7 +135,7 @@ class Henhouse
         foreach ($this->roosters->dueTimersIndexes() as $i) {
             if ($this->hensVirgo->active > 0) {
                 $randomIndex = $this->randomElement($this->hensVirgo->activeTimersIndexes());
-                $this->hensFertilized->addTimer($this->hensVirgo[$randomIndex]);
+                $this->hensFertilized->addTimer($this->hensVirgo->fixedArray[$randomIndex]);
                 $this->hensVirgo->removeTimer($randomIndex);
                 $this->roosters->removeTimer($i);
                 $this->roosters->addTimer($this->randomBetween($this->sim->getWorld()->getRoosterToFertilize()));

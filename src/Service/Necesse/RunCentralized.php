@@ -29,6 +29,7 @@ class RunCentralized implements RunInterface
         // Update the timer of each type of living beings
         $this->henhouse->tickTimersArray($deltaTime);
 
+        // Proceed for each timet hitting 0
         $this->henhouse->dueTimersArray();
 
         // Calculate next timer as the min of all timers of each type of living beings
