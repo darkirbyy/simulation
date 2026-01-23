@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Dto\Necesse\Centralized;
 
-use App\Dto\Necesse\SelfManaged\TimerArray;
 use App\Entity\Necesse\MinMax;
 use App\Entity\Necesse\Sim;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +21,10 @@ class Henhouse
     public TimerArray $hensFertilized;
     public TimerArray $roosters;
 
+    /**
+     *  Create all timer array for each type of living beings, and counter for products
+     *  and also store the sim parameter and the randomizer.
+     */
     public function __construct(public Sim $sim, public Randomizer $randomizer)
     {
         $this->producedEgg = 0;
@@ -29,9 +32,22 @@ class Henhouse
         $this->eggs = new TimerArray($sim->getLimitNest());
         $this->chicksFemale = new TimerArray(3 * $sim->getLimitHen());
         $this->chicksMale = new TimerArray(3 * $sim->getLimitRooster());
-        $this->hensVirgo = new TimerArray($sim->getLimitHen());
         $this->hensFertilized = new TimerArray($sim->getLimitHen());
+        $this->hensVirgo = new TimerArray($sim->getLimitHen());
         $this->roosters = new TimerArray($sim->getLimitRooster());
+    }
+
+    /**
+     * Add as much hens and roosters as stated by the initial conditions.
+     */
+    public function initiliaze(): void
+    {
+        for ($initialHen = 0; $initialHen < $this->sim->getInitialHen(); $initialHen++) {
+            $this->hensVirgo->addTimer($this->randomBetween($this->sim->getWorld()->getHenToLay()));
+        }
+        for ($initialRooster = 0; $initialRooster < $this->sim->getInitialRooster(); $initialRooster++) {
+            $this->roosters->addTimer(1);
+        }
     }
 
     /**

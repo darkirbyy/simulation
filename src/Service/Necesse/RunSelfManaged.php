@@ -26,15 +26,7 @@ class RunSelfManaged implements RunInterface
         // Initialize the henhouse with sim params, the randomizer, empty pool and 0 products
         $this->henhouse = new Henhouse($sim, $randomizer, new ArrayCollection(), 0, 0);
 
-        // Add as much hens and roosters as stated by the initial conditions
-        for ($initialHen = 0; $initialHen < $sim->getInitialHen(); $initialHen++) {
-            $hen = new Hen($this->henhouse);
-            $hen->initialize();
-        }
-        for ($initialRooster = 0; $initialRooster < $sim->getInitialRooster(); $initialRooster++) {
-            $rooster = new Rooster($this->henhouse);
-            $rooster->initialize();
-        }
+        $this->henhouse->initiliaze();
     }
 
     public function update(int $deltaTime): array

@@ -25,6 +25,21 @@ class Henhouse
     public function __construct(public Sim $sim, public Randomizer $randomizer, public ArrayCollection $livingBeings, public int $producedEgg, public int $producedMeat) {}
 
     /**
+     * Add as much hens and roosters as stated by the initial conditions.
+     */
+    public function initiliaze(): void
+    {
+        for ($initialHen = 0; $initialHen < $this->sim->getInitialHen(); $initialHen++) {
+            $hen = new Hen($this);
+            $hen->initialize();
+        }
+        for ($initialRooster = 0; $initialRooster < $this->sim->getInitialRooster(); $initialRooster++) {
+            $rooster = new Rooster($this);
+            $rooster->initialize();
+        }
+    }
+
+    /**
      * Randomize an int between a max and a min.
      *
      * @param MinMax $minMax the boundaries

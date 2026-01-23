@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Necesse\SelfManaged;
+namespace App\Dto\Necesse\Centralized;
 
 class TimerArray
 {
@@ -14,6 +14,7 @@ class TimerArray
         // A timer is active if it is above 0, and active keep the count for fastest conversion to bars
         $this->fixedArray = new \SplFixedArray($size);
         $this->active = 0;
+
         // Initiliaze all timers to disable, meaning -1
         for ($i = 0; $i < $this->fixedArray->getSize(); $i++) {
             $this->fixedArray[$i] = -1;

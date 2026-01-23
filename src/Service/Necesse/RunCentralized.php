@@ -17,8 +17,11 @@ class RunCentralized implements RunInterface
 
     public function start(Sim $sim, Randomizer $randomizer): void
     {
-        // Initialize the henhouse with sim params, the randomizer
+        // Create the henhouse with sim params, the randomizer
         $this->henhouse = new Henhouse($sim, $randomizer);
+
+        // Add the starting number of hens and roosters
+        $this->henhouse->initiliaze();
     }
 
     public function update(int $deltaTime): array
