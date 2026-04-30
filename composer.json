@@ -1,6 +1,6 @@
 {
     "name": "darkirby/simulation",
-    "description": "Regroup differents simulations of game mechanics ",
+    "description": "Regroup differents simulations of game mechanics",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",

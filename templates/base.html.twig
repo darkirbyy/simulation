@@ -28,10 +28,11 @@
   <body class="d-flex flex-column min-vh-100" id="body-content">
     {# Bar not visible in prod env #}
     {% if env.app.env != 'prod' %}
-      <div class="container-fluid p-0 m-0 text-center fw-bold d-flex justify-content-around app-env-dev">
+      <div class="container-fluid p-0 m-0 text-center fw-bold d-flex justify-content-around app-env-{{ env.app.env }}">
         {%- for i in 1..10 -%}
+          {% set envToText = { dev: 'DEV', stag: 'QUALIF', prod: 'PROD' } %}
           <div>
-            {{ env.app.env|upper }}
+            {{ envToText[env.app.env] }}
           </div>
         {%- endfor -%}
       </div>
