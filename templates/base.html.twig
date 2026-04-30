@@ -30,7 +30,7 @@
     {% if env.app.env != 'prod' %}
       <div class="container-fluid p-0 m-0 text-center fw-bold d-flex justify-content-around app-env-{{ env.app.env }}">
         {%- for i in 1..10 -%}
-          {% set envToText = { dev: 'DEV', stag: 'QUALIF', prod: 'PROD' } %}
+          {% set envToText = { dev: 'DEV', test: 'TEST', stag: 'QUALIF', prod: 'PROD' } %}
           <div>
             {{ envToText[env.app.env] }}
           </div>
