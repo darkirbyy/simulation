@@ -9,6 +9,8 @@
 parameters:
     app.name: '%env(string:APP_NAME)%'
     app.env: '%env(string:APP_ENV)%'
+    app.hub_url: '%env(string:HUB_BASE_URL)%'
+    app.iam_url: '%env(string:IAM_BASE_URL)%'
 
 imports:
     - { resource: 'version.yaml' }

@@ -7,6 +7,8 @@ twig:
             app:
                 name: '%app.name%'
                 env: '%app.env%'
+                iam_url: '%app.iam_url%'
+                hub_url: '%app.hub_url%'
             versioning:
                 version: '%versioning.version%'
                 version_hash: '%versioning.version_hash%'

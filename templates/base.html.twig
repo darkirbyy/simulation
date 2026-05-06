@@ -66,7 +66,25 @@
             </ul>
             {# Right part of the navbar #}
             <ul class="navbar-nav">
-              <li class="nav-item"><a href="/" {{ otherLink|raw }}>Retour au Hub</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <div>
+                    {{ app.user.username|default('<username>') }}
+                  </div>
+                  <div class="app-avatar-container ms-1">
+                    {% if app.user.toArray.picture is defined %}
+                      <img alt="" class="app-avatar-img" src="{{ app.user.toArray.picture }}" />
+                    {% else %}
+                      <span class="bi bi-person-fill"></span>
+                    {% endif %}
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a href="{{ env.app.iam_url }}" class="dropdown-item">Mon compte</a></li>
+                  <li><a href="{{ env.app.hub_url }}" class="dropdown-item">Retour au Hub</a></li>
+                  <li><a href="{{ path('mainick_keycloak_security_auth_logout') }}" class="dropdown-item link-danger">Se déconnecter</a></li>
+                </ul>
+              </li>
             </ul>
           </div>
         </div>
@@ -111,7 +129,9 @@
             <span class="fst-italic">Bootstrap 5</span>
           </div>
           {# Right part : version and update of the app #}
-          <div class="col-12 col-md-6 text-center text-md-start"></div>
+          <div class="col-12 col-md-6 text-center text-md-start">
+            Version {{ env.versioning.version }} - Mise à jour le {{ env.versioning.release_date|format_datetime('short', 'none') }}
+          </div>
         </div>
       </div>
     </footer>
