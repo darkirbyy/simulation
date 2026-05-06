@@ -71,6 +71,9 @@
             ".php-cs-fixer.dist.php"
         ]
     },
+    "mainick/keycloak-client-bundle": {
+        "version": "4.0.3"
+    },
     "phpunit/phpunit": {
         "version": "11.5",
         "recipe": {

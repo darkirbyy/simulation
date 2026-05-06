@@ -1587,6 +1587,33 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     enable_static_query_cache?: bool|Param, // Default: true
  *     connection_keys?: list<mixed>,
  * }
+ * @psalm-type MainickKeycloakClientConfig = array{
+ *     admin_cli?: bool|array{ // Enable this if you want to use the admin-cli client to authenticate with Keycloak. This is useful if you want to use the Keycloak Admin REST API.
+ *         enabled?: bool|Param, // Default: false
+ *         realm?: scalar|Param|null,
+ *         client_id?: scalar|Param|null,
+ *         username?: scalar|Param|null,
+ *         password?: scalar|Param|null,
+ *     },
+ *     keycloak?: array{
+ *         verify_ssl?: bool|Param, // Default: true
+ *         base_url?: scalar|Param|null,
+ *         realm?: scalar|Param|null,
+ *         client_id?: scalar|Param|null,
+ *         client_secret?: scalar|Param|null, // Default: null
+ *         redirect_uri?: scalar|Param|null, // Default: null
+ *         encryption_algorithm?: scalar|Param|null, // Default: null
+ *         encryption_key?: scalar|Param|null, // Default: null
+ *         encryption_key_path?: scalar|Param|null, // Default: null
+ *         encryption_key_passphrase?: scalar|Param|null, // Default: null
+ *         version?: scalar|Param|null, // Default: null
+ *         allowed_jwks_domains?: list<scalar|Param|null>,
+ *     },
+ *     security?: bool|array{ // Enable this if you want to use the Keycloak security layer. This will protect your application with Keycloak.
+ *         enabled?: bool|Param, // Default: false
+ *         default_target_route_name?: scalar|Param|null, // Default: null
+ *     },
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1602,6 +1629,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     webpack_encore?: WebpackEncoreConfig,
  *     twig_extra?: TwigExtraConfig,
  *     bizkit_versioning?: BizkitVersioningConfig,
+ *     mainick_keycloak_client?: MainickKeycloakClientConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1621,6 +1649,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         twig_extra?: TwigExtraConfig,
  *         bizkit_versioning?: BizkitVersioningConfig,
  *         zenstruck_foundry?: ZenstruckFoundryConfig,
+ *         mainick_keycloak_client?: MainickKeycloakClientConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1637,6 +1666,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         webpack_encore?: WebpackEncoreConfig,
  *         twig_extra?: TwigExtraConfig,
  *         bizkit_versioning?: BizkitVersioningConfig,
+ *         mainick_keycloak_client?: MainickKeycloakClientConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1656,6 +1686,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         bizkit_versioning?: BizkitVersioningConfig,
  *         zenstruck_foundry?: ZenstruckFoundryConfig,
  *         dama_doctrine_test?: DamaDoctrineTestConfig,
+ *         mainick_keycloak_client?: MainickKeycloakClientConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
