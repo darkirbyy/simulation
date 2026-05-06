@@ -27,7 +27,7 @@ when@test:
             # "TEST_TOKEN" is typically set by ParaTest
             dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
-when@prod:
+when@prod: &doctrine-prod
     doctrine:
         orm:
             auto_generate_proxy_classes: false
@@ -46,3 +46,5 @@ when@prod:
                     adapter: cache.app
                 doctrine.system_cache_pool:
                     adapter: cache.system
+
+when@stag: *doctrine-prod
