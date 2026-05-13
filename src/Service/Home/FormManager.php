@@ -52,7 +52,7 @@ class FormManager
     {
         $tokenValue = $this->requestStack->getCurrentRequest()->getPayload()->get('_token');
         if (!$this->csrfTokenManager->isTokenValid(new CsrfToken($tokenId, $tokenValue))) {
-            $this->flashBag->add('simulation/danger', new FlashMessage('Le jeton CSRF est invalide.'));
+            $this->flashBag->add('danger', new FlashMessage('Le jeton CSRF est invalide.'));
 
             return false;
         }
@@ -71,13 +71,13 @@ class FormManager
             $this->entityManager->flush();
 
             if (!empty($flashSuccess)) {
-                $this->flashBag->add('simulation/success', $flashSuccess);
+                $this->flashBag->add('success', $flashSuccess);
             }
 
             return true;
         } catch (ConstraintViolationException $e) {
             $message = $this->exceptionManager->handleDatabase($e);
-            $this->flashBag->add('simulation/danger', new FlashMessage($message));
+            $this->flashBag->add('danger', new FlashMessage($message));
 
             return false;
         }
@@ -94,13 +94,13 @@ class FormManager
             $this->entityManager->flush();
 
             if (!empty($flashSuccess)) {
-                $this->flashBag->add('simulation/success', $flashSuccess);
+                $this->flashBag->add('success', $flashSuccess);
             }
 
             return true;
         } catch (ConstraintViolationException $e) {
             $message = $this->exceptionManager->handleDatabase($e);
-            $this->flashBag->add('simulation/danger', new FlashMessage($message));
+            $this->flashBag->add('danger', new FlashMessage($message));
 
             return false;
         }

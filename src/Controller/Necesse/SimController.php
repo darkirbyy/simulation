@@ -83,7 +83,7 @@ class SimController extends AbstractController
     public function delete(Sim $sim, FormManager $fm): Response
     {
         $flashSuccess = new FlashMessage('La simulation a été supprimée avec succès.');
-        if ($fm->checkTokenAndRemove('simulation/delete', $sim, $flashSuccess)) {
+        if ($fm->checkTokenAndRemove('delete', $sim, $flashSuccess)) {
             return $this->redirectToRoute('necesse_sim_index');
         }
 

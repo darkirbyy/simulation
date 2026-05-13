@@ -5,7 +5,7 @@
   4 types of flashes: info, success, warning, danger #}
 {% block flash %}
   <div>
-    {% for flash in app.flashes('simulation/info') %}
+    {% for flash in app.flashes('info') %}
       <div class="alert alert-primary alert-dismissible fade show" role="alert">
         <div class="bi bi-info-square-fill">
           {{ flash.message|raw }}
@@ -13,7 +13,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     {% endfor %}
-    {% for flash in app.flashes('simulation/success') %}
+    {% for flash in app.flashes('success') %}
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <div class="bi bi-check-circle-fill">
           {{ flash.message|raw }}
@@ -21,7 +21,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     {% endfor %}
-    {% for flash in app.flashes('simulation/warning') %}
+    {% for flash in app.flashes('warning') %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <div class="bi bi-exclamation-triangle-fill">
           {{ flash.message|raw }}
@@ -29,7 +29,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     {% endfor %}
-    {% for flash in app.flashes('simulation/danger') %}
+    {% for flash in app.flashes('danger') %}
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <div class="bi bi-x-square-fill">
           {{ flash.message|raw }}

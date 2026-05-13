@@ -60,7 +60,7 @@ class WorldController extends AbstractController
     public function delete(World $world, FormManager $fm): Response
     {
         $flashSuccess = new FlashMessage('Le monde a été supprimé avec succès.');
-        if ($fm->checkTokenAndRemove('simulation/delete', $world, $flashSuccess)) {
+        if ($fm->checkTokenAndRemove('delete', $world, $flashSuccess)) {
             return $this->redirectToRoute('necesse_world_index');
         }
 
