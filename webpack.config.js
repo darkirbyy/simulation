@@ -102,7 +102,7 @@ Encore
             type: 'https',
             options: {
                 pfx: path.join(process.env.HOME, '.config/symfony-cli/certs/default.p12'),
-            },
+            }
         }
         // options.port = 'auto'
     })
