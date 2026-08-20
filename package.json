@@ -49,5 +49,8 @@
     },
     "browserslist": [
         "defaults"
-    ]
+    ],
+    "allowScripts": {
+        "core-js": false
+    }
 }

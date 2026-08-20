@@ -53,16 +53,14 @@ label.form-label.required::after {
 
 .app-avatar-img {
   aspect-ratio: 1/1;
-  border-radius: calc(var(--bs-border-radius)*10) !important;
-  box-shadow: 0 .1rem .2rem var(--app-avatar-shadow-color);
-  -o-object-fit: cover;
+  border-radius: calc(var(--bs-border-radius) * 10) !important;
+  box-shadow: 0 0.1rem 0.2rem var(--app-avatar-shadow-color);
   object-fit: cover;
-  -o-object-position: center;
   object-position: center;
   width: 100%;
 }
 
-.app-avatar-container{
+.app-avatar-container {
   max-width: 1.5rem;
 }
 
