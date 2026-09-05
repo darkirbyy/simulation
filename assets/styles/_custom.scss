@@ -93,15 +93,3 @@ label.form-label.required::after {
     #ace293 20px
   );
 }
-
-.app-env-stag {
-  z-index: 1000;
-  color: #160701;
-  background: repeating-linear-gradient(
-    45deg,
-    #e77171,
-    #e77171 10px,
-    #f88282 10px,
-    #f88282 20px
-  );
-}

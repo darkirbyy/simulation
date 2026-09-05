@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: 'The deployment environment (stag or prod)'
+        description: 'The deployment environment (prod)'
         required: true
         type: string
       version:
