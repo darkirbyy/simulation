@@ -93,3 +93,72 @@ label.form-label.required::after {
     #ace293 20px
   );
 }
+
+.app-apad-container {
+  max-width: 25rem;
+}
+
+.app-apad-grid {
+  grid-template-columns: repeat(7, 1fr);
+  border: 2px black solid;
+}
+
+.app-apad-grid div {
+  aspect-ratio: 1;
+  font-weight: 600;
+  font-size: 1.2rem;
+  border-bottom: 1px black solid;
+  border-right: 1px black solid;
+}
+
+.app-apad-grid div:nth-child(-n + 7) {
+  border-top: 1px black solid;
+}
+
+.app-apad-grid div:nth-child(7n - 6) {
+  border-left: 1px black solid;
+}
+
+.app-apad-cell-1 {
+  background-color: white;
+}
+
+.app-apad-cell-1 {
+  background-color: red;
+}
+
+.app-apad-cell-2 {
+  background-color: orange;
+}
+
+.app-apad-cell-3 {
+  background-color: yellow;
+}
+
+.app-apad-cell-4 {
+  background-color: blue;
+}
+
+.app-apad-cell-5 {
+  background-color: cyan;
+}
+
+.app-apad-cell-6 {
+  background-color: green;
+}
+
+.app-apad-cell-7 {
+  background-color: purple;
+}
+
+.app-apad-cell-8 {
+  background-color: magenta;
+}
+
+.app-apad-cell-9 {
+  background-color: white;
+}
+
+.app-apad-cell-10 {
+  background-color: black;
+}

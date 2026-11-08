@@ -1,0 +1,88 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Service\Apad;
+
+use App\Dto\Apad\Date;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
+
+class Solver
+{
+    // prettier-ignore
+    public const array KEYS = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'f1',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'f2',
+        '1', '2', '3', '4', '5', '6', '7',
+        '8', '9', '10', '11', '12', '13', '14',
+        '15', '16', '17', '18', '19', '20', '21',
+        '22', '23', '24', '25', '26', '27', '28',
+        '29', '30', '31', 'f3', 'f4', 'f5', 'f6', ];
+
+    // prettier-ignore
+    public const array DEFAULT = [
+        0,  0,  0,  0,  0,  0,  10,
+        0,  0,  0,  0,  0,  0,  10,
+        0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  10, 10, 10, 10];
+
+    public function __construct(private Filesystem $filesystem, #[Autowire('%kernel.project_dir%')] private string $projectDir) {}
+
+    public function solve(Date $date): array
+    {
+        $solutions = $this->readFile($date);
+        if (false === $solutions) {
+            $solutions = $this->callRustBin($date);
+            if (false !== $solutions) {
+                $this->writeFile($date, $solutions);
+            }
+        }
+
+        if (false === $solutions) {
+            $values = self::DEFAULT;
+            $ok = false;
+        } else {
+            $values = explode(';', $solutions[random_int(0, count($solutions))]);
+            $ok = true;
+        }
+
+        return [$ok, array_combine(self::KEYS, $values)];
+    }
+
+    private function callRustBin(Date $date): array|false
+    {
+        $binPath = Path::join($this->projectDir, 'bin', 'apad_solver');
+        $command = $binPath . ' ' . $date->toCommand();
+        $output = null;
+        $resultCode = null;
+        exec($command, $output, $resultCode);
+
+        return 0 == $resultCode ? $output : false;
+    }
+
+    private function readFile(Date $date): array|false
+    {
+        $path = $this->buildPath($date);
+        if (!$this->filesystem->exists($path)) {
+            return false;
+        }
+
+        return explode("\n", $this->filesystem->readFile($path));
+    }
+
+    private function writeFile(Date $date, array $solutions): void
+    {
+        $path = $this->buildPath($date);
+        $this->filesystem->dumpFile($path, implode("\n", $solutions));
+    }
+
+    private function buildPath(Date $date): string
+    {
+        return Path::join($this->projectDir, 'var', 'apad', $date->toFileName());
+    }
+}

@@ -1,5 +1,6 @@
 .vscode/
 config/reference.php
+bin/apad_solver
 
 ###> symfony/framework-bundle ###
 /.env.local

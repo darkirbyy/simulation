@@ -3,5 +3,24 @@
 {% set title = 'A puzzle a day' %}
 
 {% block main %}
-  Choisir une date :
+  <p>
+    Choisir une date :
+  </p>
+
+  <div class="text-center mx-auto app-apad-container">
+    {% if ok %}
+      <div class="d-grid p-2 justify-content-center align-items-center app-apad-grid">
+        {% for key, cell in board %}
+          <div class="d-flex justify-content-center align-items-center app-apad-cell-{{ cell }}">
+            {{ cell == 0 or cell == 9 ? key }}
+            {# {{ cell == 0 or cell == 9 ? key : (cell < 10 ? cell) }} #}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-danger">
+        Erreur lors du calcul des solutions
+      </p>
+    {% endif %}
+  </div>
 {% endblock %}
