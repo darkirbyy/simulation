@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 #[Route('/necesse/sim', name: 'necesse_sim_')]
 class SimController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function index(SimRepository $simRepository): Response
     {
         $sims = $simRepository->findAll();

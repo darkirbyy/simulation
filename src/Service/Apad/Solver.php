@@ -44,20 +44,21 @@ class Solver
         }
 
         if (false === $solutions) {
+            $count = 0;
             $values = self::DEFAULT;
-            $ok = false;
         } else {
-            $values = explode(';', $solutions[random_int(0, count($solutions))]);
-            $ok = true;
+            $count = count($solutions);
+            $values = explode(';', $solutions[random_int(0, count($solutions) - 1)]);
         }
 
-        return [$ok, array_combine(self::KEYS, $values)];
+        return [$count, array_combine(self::KEYS, $values)];
     }
 
     private function callRustBin(Date $date): array|false
     {
         $binPath = Path::join($this->projectDir, 'bin', 'apad_solver');
         $command = $binPath . ' ' . $date->toCommand();
+
         $output = null;
         $resultCode = null;
         exec($command, $output, $resultCode);

@@ -3,12 +3,30 @@
 {% set title = 'A puzzle a day' %}
 
 {% block main %}
-  <p>
-    Choisir une date :
-  </p>
+  {{ form_start(form) }}
+  <div class="d-flex justify-content-center align-items-end gap-2 mb-3">
+    {{ form_row(form.day) }}
+    {{ form_row(form.month) }}
+    <div class="mb-3">
+      <button type="submit" class="btn btn-outline-primary">Calculer</button>
+    </div>
+  </div>
+  {{ form_end(form) }}
 
-  <div class="text-center mx-auto app-apad-container">
-    {% if ok %}
+  {% if count is not null and board is not null %}
+    {% if count >= 0 %}
+      <p class="text-center fw-bold">
+        {{ count }} solutions
+        <a data-turbo="false" href="{{ app.request.requesturi }}" class="btn btn-sm btn-outline-secondary" aria-label="Relancer">
+          <span aria-hidden="true" data-turbo="false" class="bi bi-arrow-repeat"></span>
+        </a>
+      </p>
+    {% else %}
+      <p class="text-center fw-bold text-danger">
+        Erreur lors du calcul des solutions
+      </p>
+    {% endif %}
+    <div class="text-center mx-auto app-apad-container">
       <div class="d-grid p-2 justify-content-center align-items-center app-apad-grid">
         {% for key, cell in board %}
           <div class="d-flex justify-content-center align-items-center app-apad-cell-{{ cell }}">
@@ -17,10 +35,6 @@
           </div>
         {% endfor %}
       </div>
-    {% else %}
-      <p class="text-center text-danger">
-        Erreur lors du calcul des solutions
-      </p>
-    {% endif %}
-  </div>
+    </div>
+  {% endif %}
 {% endblock %}

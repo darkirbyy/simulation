@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 #[Route('/necesse/world', name: 'necesse_world_')]
 class WorldController extends AbstractController
 {
-    #[Route('/', name: 'index', methods: ['GET'])]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function index(WorldRepository $worldRepo): Response
     {
         $worlds = $worldRepo->findAll();

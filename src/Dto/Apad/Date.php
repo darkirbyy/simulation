@@ -22,6 +22,11 @@ class Date
 
     public function toCommand(): string
     {
-        return $this->day . ' ' . mb_strtolower($this->month->value);
+        return $this->day . ' ' . $this->month->value;
+    }
+
+    public static function fromDateTime(\DateTime $dateTime): Date
+    {
+        return new Date((int) $dateTime->format('d'), MonthEnum::fromMonthNumber((int) $dateTime->format('m')));
     }
 }
