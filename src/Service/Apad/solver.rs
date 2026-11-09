@@ -1,4 +1,4 @@
-use std::sync::Mutex;
+use std::str::FromStr;
 
 #[rustfmt::skip]
 const ROT: [i8;49] = [-18, -11,  -4,   3,  10,  17,  24, 
@@ -18,6 +18,45 @@ const SYM: [i8;49] = [ 18,  19,  20,  21,  22,  23,  24,
                       -17, -16, -15, -14, -13, -12, -11, 
                       -24, -23, -22, -21, -20, -19, -18];
 
+#[rustfmt::skip]
+#[derive(Debug)]
+enum Month {
+    Jan = 0,
+    Feb = 1,
+    Mar = 2,
+    Apr = 3,
+    May = 4,
+    Jun = 5,
+    Jul = 7,
+    Aug = 8,
+    Sep = 9,
+    Oct = 10,
+    Nov = 11,
+    Dec = 12,
+}
+
+impl FromStr for Month {
+    type Err = ();
+
+    fn from_str(input: &str) -> Result<Month, Self::Err> {
+        match input {
+            "jan" => Ok(Month::Jan),
+            "feb" => Ok(Month::Feb),
+            "mar" => Ok(Month::Mar),
+            "apr" => Ok(Month::Apr),
+            "may" => Ok(Month::May),
+            "jun" => Ok(Month::Jun),
+            "jul" => Ok(Month::Jul),
+            "aug" => Ok(Month::Aug),
+            "sep" => Ok(Month::Sep),
+            "oct" => Ok(Month::Oct),
+            "nov" => Ok(Month::Nov),
+            "dec" => Ok(Month::Dec),
+            _ => Err(()),
+        }
+    }
+}
+
 #[derive(Clone)]
 struct Piece {
     representation: u8,
@@ -25,19 +64,28 @@ struct Piece {
 }
 
 fn main() {
-    board_solve(board_init(10,44));
+    let day: i32 = std::env::args()
+        .nth(1)
+        .expect("no day given")
+        .trim()
+        .parse()
+        .expect("unable to parse the day");
+    let month: Month = std::env::args()
+        .nth(2)
+        .expect("no month given")
+        .trim()
+        .parse()
+        .expect("Unable to parse the month");
+    board_solve(board_init(month as usize, (day + 13) as usize));
 }
 
-fn board_solve(board: [u8; 49]) -> u32 {
+fn board_solve(board: [u8; 49]) {
     let pieces = pieces_init(board);
-    let count: Mutex<u32> = Mutex::new(0);
-    board_complete(board, pieces, &count);
-    return *count.lock().unwrap();
+    board_complete(board, pieces);
 }
 
-fn board_complete(board: [u8; 49], mut pieces: Vec<Piece>, count: &Mutex<u32>) {
+fn board_complete(board: [u8; 49], mut pieces: Vec<Piece>) {
     if pieces.iter().count() == 0 {
-        *count.lock().unwrap() += 1;
         board_display_raw(board);
     } else {
         pieces.sort_by(|a, b| {
@@ -50,7 +98,7 @@ fn board_complete(board: [u8; 49], mut pieces: Vec<Piece>, count: &Mutex<u32>) {
         for placement in piece.placements.iter() {
             let new_board = board_add_placement(board, *placement, piece.representation);
             let new_pieces = pieces_intersect_placement(&pieces, *placement);
-            board_complete(new_board, new_pieces, count);
+            board_complete(new_board, new_pieces);
         }
     }
 }
