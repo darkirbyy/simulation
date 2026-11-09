@@ -28,10 +28,9 @@
     {% endif %}
     <div class="text-center mx-auto app-apad-container">
       <div class="d-grid p-2 justify-content-center align-items-center app-apad-grid">
-        {% for key, cell in board %}
-          <div class="d-flex justify-content-center align-items-center app-apad-cell-{{ cell }}">
-            {{ cell == 0 or cell == 9 ? key }}
-            {# {{ cell == 0 or cell == 9 ? key : (cell < 10 ? cell) }} #}
+        {% for cell in board %}
+          <div class="d-flex justify-content-center align-items-center app-apad-cell-{{ cell.value }} {{ cell.borders|join(' ') }}">
+            {{ cell.value == 0 or cell.value == 9 ? cell.text }}
           </div>
         {% endfor %}
       </div>

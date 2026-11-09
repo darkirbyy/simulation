@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Apad;
 
+use App\Dto\Apad\Cell;
 use App\Dto\Apad\Date;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
@@ -12,7 +13,7 @@ use Symfony\Component\Filesystem\Path;
 class Solver
 {
     // prettier-ignore
-    public const array KEYS = [
+    public const array TEXTS = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'f1',
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'f2',
         '1', '2', '3', '4', '5', '6', '7',
@@ -49,9 +50,23 @@ class Solver
         } else {
             $count = count($solutions);
             $values = explode(';', $solutions[random_int(0, count($solutions) - 1)]);
+            array_walk($values, fn(&$value) => ($value = (int) $value));
         }
 
-        return [$count, array_combine(self::KEYS, $values)];
+        $board = [];
+        for ($index = 0; $index < count(self::TEXTS); $index++) {
+            $text = self::TEXTS[$index];
+            $value = $values[$index];
+            $borders = [];
+            foreach ([-7 => 'bt', -1 => 'bl', 1 => 'br', 7 => 'bb'] as $offset => $class) {
+                if (!isset($values[$index + $offset]) || $values[$index + $offset] != $value) {
+                    $borders[] = $class;
+                }
+            }
+            $board[$index] = new Cell($text, $value, $borders);
+        }
+
+        return [$count, $board];
     }
 
     private function callRustBin(Date $date): array|false
