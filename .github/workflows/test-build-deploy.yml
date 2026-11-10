@@ -140,6 +140,9 @@ jobs:
         name: apad-solver-${{ inputs.version }}
         path: bin
 
+    - name: Set execution permission to the solver
+      run: chmod a+x bin/apad-solver
+
     - name: Upload build
       uses: actions/upload-artifact@v7
       with:
@@ -172,6 +175,7 @@ jobs:
       with:
         name: build-${{ inputs.version }}
         path: build
+
 
     - name: Deploy on server
       uses: easingthemes/ssh-deploy@main
