@@ -75,7 +75,23 @@ jobs:
         php vendor/bin/coverage-check var/coverage/clover.xml ${{ vars.MIN_COVERAGE }}
         coverage=$(php vendor/bin/coverage-check var/coverage/clover.xml 1 --only-percentage | grep -Eo '[0-9.]+%' | sed 's/%//')
         echo "coverage=$coverage" >> $GITHUB_OUTPUT
-        
+
+  compile:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - name: Checkout code in the runner
+      uses: actions/checkout@v6
+
+    - name: Compile the rust solver
+      run: rustc src/Service/Apad/solver.rs -o apad-solver -O   
+
+    - name: Upload solver
+      uses: actions/upload-artifact@v7
+      with:
+        name: apad-solver-${{ inputs.version }}
+        path: apad-solver
+        archive: false
+
   build:
     runs-on: ubuntu-24.04
     steps:
@@ -117,6 +133,12 @@ jobs:
       run: | 
         npm install
         npm run build
+
+    - name: Download solver
+      uses: actions/download-artifact@v7
+      with:
+        name: apad-solver-${{ inputs.version }}
+        path: bin
 
     - name: Upload build
       uses: actions/upload-artifact@v7

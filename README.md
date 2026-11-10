@@ -56,6 +56,9 @@ To use default git hooks, run `git config core.hooksPath ./githooks`. Current ho
 - prettify and linting all staged files before commit (see [Code quality](#code-quality))
 - running tests before push : all tests for `main` branch, unit tests otherwise
 
+For the A Puzzle A Day part (apad), the solver is written and rust.  
+Compile it with `rustc src/Service/Apad/solver.rs -o bin/apad-solver -O`.
+
 ## Dev
 
 To increment the version, use `symfony console bizkit:versioning:increment`.
