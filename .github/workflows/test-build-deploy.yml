@@ -90,10 +90,10 @@ jobs:
       with:
         name: apad-solver-${{ inputs.version }}
         path: apad-solver
-        archive: false
 
   build:
     runs-on: ubuntu-24.04
+    needs: [compile]
     steps:
     - name: Checkout code in the runner
       uses: actions/checkout@v6
