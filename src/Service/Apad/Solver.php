@@ -71,7 +71,7 @@ class Solver
 
     private function callRustBin(Date $date): array|false
     {
-        $binPath = Path::join($this->projectDir, 'bin', 'apad_solver');
+        $binPath = Path::join($this->projectDir, 'bin', 'apad-solver');
         $command = $binPath . ' ' . $date->toCommand();
 
         $output = null;
