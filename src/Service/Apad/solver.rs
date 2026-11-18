@@ -1,38 +1,12 @@
 use std::str::FromStr;
 
-#[rustfmt::skip]
-const ROT: [i8;49] = [-18, -11,  -4,   3,  10,  17,  24, 
-                      -19, -12,  -5,   2,   9,  16,  23,
-                      -20, -13,  -6,   1,   8,  15,  22, 
-                      -21, -14,  -7,   0,   7,  14,  21, 
-                      -22, -15,  -8,  -1,   6,  13,  20, 
-                      -23, -16,  -9,  -2,   5,  12,  19, 
-                      -24, -17, -10,  -3,   4,  11,  18];
+// ////////////////////////////////
+// Input conversion
+// ////////////////////////////////
 
-#[rustfmt::skip]
-const SYM: [i8;49] = [ 18,  19,  20,  21,  22,  23,  24,
-                       11,  12,  13,  14,  15,  16,  17,
-                        4,   5,   6,   7,   8,   9,  10,
-                       -3,  -2,  -1,   0,   1,   2,   3, 
-                      -10,  -9,  -8,  -7,  -6,  -5,  -4, 
-                      -17, -16, -15, -14, -13, -12, -11, 
-                      -24, -23, -22, -21, -20, -19, -18];
-
-#[rustfmt::skip]
 #[derive(Debug)]
-enum Month {
-    Jan = 0,
-    Feb = 1,
-    Mar = 2,
-    Apr = 3,
-    May = 4,
-    Jun = 5,
-    Jul = 7,
-    Aug = 8,
-    Sep = 9,
-    Oct = 10,
-    Nov = 11,
-    Dec = 12,
+enum Month { 
+    Jan = 0, Feb = 1, Mar = 2, Apr = 3, May = 4, Jun = 5, Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12,
 }
 
 impl FromStr for Month {
@@ -57,180 +31,237 @@ impl FromStr for Month {
     }
 }
 
-#[derive(Clone)]
+// ////////////////////////////////
+// Coordinate system
+// ////////////////////////////////
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, PartialOrd, Ord)]
+struct Co {
+    row: i8,
+    col: i8,
+}
+
+impl Co {
+    fn from_i8(number: i8) -> Co {
+        Co {row : number / 7, col : number % 7}
+    }
+}
+
+// ////////////////////////////////
+// Pose operation
+// ////////////////////////////////
+
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+struct Pose {
+    cells: Vec<Co>,
+}
+
+impl Pose {
+    fn standardize(&mut self) {
+        self.cells.sort();
+        let offset = self.cells[0].clone();
+        for cell in self.cells.iter_mut() {
+            cell.row -= offset.row;
+            cell.col -= offset.col;
+        }
+    }
+
+    fn flip(&mut self) {
+        for cell in self.cells.iter_mut() {
+            cell.col = -cell.col;
+        }
+    }
+
+    fn rotate90(&mut self) {
+        for cell in self.cells.iter_mut() {
+            let temp = cell.row;
+            cell.row = -cell.col;
+            cell.col = temp;
+        }
+    }
+}
+
+// ////////////////////////////////
+// Piece operations
+// ////////////////////////////////
+
+#[derive(Debug)]
 struct Piece {
-    representation: u8,
-    placements: Vec<[i8; 6]>,
+    poses: Vec<Pose>,
 }
 
-fn main() {
-    let day: i32 = std::env::args()
-        .nth(1)
-        .expect("no day given")
-        .trim()
-        .parse()
-        .expect("unable to parse the day");
-    let month: Month = std::env::args()
-        .nth(2)
-        .expect("no month given")
-        .trim()
-        .parse()
-        .expect("Unable to parse the month");
-    board_solve(board_init(month as usize, (day + 13) as usize));
+impl Piece {
+    fn add_pose(&mut self, new_pose: &Pose) {
+        for pose in self.poses.iter() {
+            if *pose == *new_pose {
+                return;
+            }
+        }
+        self.poses.push(new_pose.clone());
+    }
+
+    fn new(pose: &mut Pose) -> Self {
+        let mut piece = Piece { poses: vec![] };
+
+        for k in 0..8 {
+            if k == 4 {
+                pose.flip();
+            }
+            if k % 4 != 0 {
+                pose.rotate90();
+            }
+            pose.standardize();
+            piece.add_pose(pose);
+        }
+
+        piece
+    }
 }
 
-fn board_solve(board: [u8; 49]) {
-    let pieces = pieces_init(board);
-    board_complete(board, pieces);
+// ////////////////////////////////
+// Piece set
+// ////////////////////////////////
+
+const MAX_PIECES: usize = 8;
+
+#[derive(Debug)]
+struct PieceSet {
+    pieces: [Piece; MAX_PIECES],
+    remaining: [bool; MAX_PIECES],
 }
 
-fn board_complete(board: [u8; 49], mut pieces: Vec<Piece>) {
-    if pieces.iter().count() == 0 {
-        board_display_raw(board);
-    } else {
-        pieces.sort_by(|a, b| {
-            b.placements
-                .iter()
-                .count()
-                .cmp(&a.placements.iter().count())
-        });
-        let piece = pieces.pop().expect("Unable to pop an new piece.");
-        for placement in piece.placements.iter() {
-            let new_board = board_add_placement(board, *placement, piece.representation);
-            let new_pieces = pieces_intersect_placement(&pieces, *placement);
-            board_complete(new_board, new_pieces);
+impl PieceSet {
+    fn new() -> PieceSet {
+        PieceSet {
+            #[rustfmt::skip]
+            pieces: [
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 1, col: 0}, Co {row: 1, col: 1}, Co {row: 1, col: 2}, Co {row: 2, col: 2}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 1, col: 0}, Co {row: 2, col: 0}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 1, col: 2}, Co {row: 1, col: 3}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 0, col: 3}, Co {row: 1, col: 0}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 0, col: 3}, Co {row: 1, col: 1}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 1, col: 0}, Co {row: 1, col: 1}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 1, col: 0}, Co {row: 1, col: 2}]}),
+                Piece::new(&mut Pose { cells: vec![Co {row: 0, col: 0}, Co {row: 0, col: 1}, Co {row: 0, col: 2}, Co {row: 1, col: 0}, Co {row: 1, col: 1}, Co {row: 1, col:2}]}),
+            ],
+            remaining: [true; 8],
         }
     }
 }
 
-fn board_init(c1: usize, c2: usize) -> [u8; 49] {
-    let mut board: [u8; 49] = [0; 49];
-    board[6] = 10;
-    board[13] = 10;
-    board[45] = 10;
-    board[46] = 10;
-    board[47] = 10;
-    board[48] = 10;
+// ////////////////////////////////
+// Grid
+// ////////////////////////////////
 
-    board[c1] = 9;
-    board[c2] = 9;
-    return board;
+const GRID_HEIGHT: usize = 7;
+const GRID_WIDTH: usize = 7;
+struct Grid {
+    cells: [[i8; GRID_WIDTH]; GRID_HEIGHT],
 }
 
-fn board_add_placement(mut board: [u8; 49], placement: [i8; 6], representation: u8) -> [u8; 49] {
-    for cell in placement {
-        board[cell as usize] = representation;
+impl Grid {
+    #[rustfmt::skip]
+    fn new(Co {row: row1, col: col1,}: Co, Co {row: row2, col: col2,}: Co) -> Grid {
+        let mut grid = Grid {
+            cells: [[0; GRID_WIDTH]; GRID_HEIGHT],
+        };
+        grid.cells[0][6] = 10;
+        grid.cells[1][6] = 10;
+        grid.cells[6][3] = 10;
+        grid.cells[6][4] = 10;
+        grid.cells[6][5] = 10;
+        grid.cells[6][6] = 10;
+        grid.cells[row1 as usize][col1 as usize] = 9;
+        grid.cells[row2 as usize][col2 as usize] = 9;
+        grid
     }
 
-    return board;
-}
+    fn find_first_free_cell(&self) -> Option<Co> {
+        for i in 0..GRID_HEIGHT {
+            for j in 0..GRID_WIDTH {
+                if self.cells[i][j] == 0 {
+                    return Option::Some(Co {
+                        row: i as i8,
+                        col: j as i8,
+                    });
+                }
+            }
+        }
+        Option::None
+    }
 
-fn board_display_raw(board: [u8; 49]) {
-    for (key, cell) in board.iter().enumerate() {
-        print!("{}", *cell);
-        if key < 48 {
-            print!(";");
+    fn is_pose_valid(&self, pose: &Pose, co: &Co) -> bool {
+        for cell in pose.cells.iter() {
+            let ii = (co.row + cell.row) as usize;
+            let jj = (co.col + cell.col) as usize;
+            if ii >= GRID_HEIGHT || jj >= GRID_WIDTH || self.cells[ii][jj] != 0 {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    fn pose(&mut self, pose: &Pose, co: &Co, value: i8) {
+        for cell in pose.cells.iter() {
+            let ii = (co.row + cell.row) as usize;
+            let jj = (co.col + cell.col) as usize;
+            self.cells[ii][jj] = value;
         }
     }
-    println!();
-}
 
-#[rustfmt::skip]
-fn pieces_init(board: [u8; 49]) -> Vec<Piece> {
-    let piece1 = Piece {
-        representation: 1,
-        placements:     piece_find_placements(board, [0,  0,  1,  8, -1, -8], vec!((0,0), (0,1), (1,0), (1,1))),
-    };
-    let piece2 = Piece {
-        representation: 2,
-        placements:     piece_find_placements(board,  [0,  0,  1,  2,  7, 14], vec!((0,0), (0,1), (0,2), (0,3))) 
-    };
-    let piece3 = Piece {
-        representation: 3,
-        placements:     piece_find_placements(board,  [0,  0,  1,  2,  7,  6], vec!((0,0), (0,1), (0,2), (0,3), (1,0), (1,1), (1,2), (1,3))) 
-    };
-    let piece4 = Piece {
-        representation: 4,
-        placements:     piece_find_placements(board,  [0,  0,  1,  2, -1,  6], vec!((0,0), (0,1), (0,2), (0,3), (1,0), (1,1), (1,2), (1,3))) 
-    };
-    let piece5 = Piece {
-        representation: 5,
-        placements:     piece_find_placements(board,  [0,  0,  1,  7, -1, -2], vec!((0,0), (0,1), (0,2), (0,3), (1,0), (1,1), (1,2), (1,3))) 
-    };
-    let piece6 = Piece {
-        representation: 6,
-        placements:     piece_find_placements(board,  [0,  0,  1,  7,  6, -1], vec!((0,0), (0,1), (0,2), (0,3), (1,0), (1,1), (1,2), (1,3))) 
-    };
-    let piece7 = Piece {
-        representation: 7,
-        placements:     piece_find_placements(board,  [0,  0,  1,  8, -1 , 6], vec!((0,0), (0,1), (0,2), (0,3))) 
-    };
-    let piece8 = Piece {
-        representation: 8,
-        placements:     piece_find_placements(board,  [0,  1,  7,  8, -1,  6], vec!((0,0), (0,1))) 
-    };
-
-    return vec![piece1, piece2,piece3, piece4, piece5, piece6,piece7, piece8];
-}
-
-fn piece_find_placements(
-    board: [u8; 49],
-    relative_placement: [i8; 6],
-    operations: Vec<(i8, i8)>,
-) -> Vec<[i8; 6]> {
-    let mut valid_placements = Vec::new();
-
-    for start_cell in 0..49 as i8 {
-        if board[start_cell as usize] > 0 {
-            continue;
+    fn print(&self) {
+        for i in 0..GRID_HEIGHT {
+            for j in 0..GRID_WIDTH {
+                print!("{}", self.cells[i][j]);
+                if i < GRID_HEIGHT - 1 || j < GRID_WIDTH - 1 {
+                    print!(";");
+                }
+            }
         }
-        for operation in &operations {
-            let placement = placement_operate(relative_placement, start_cell, *operation);
-            if placement_test_on_boad(board, placement) {
-                valid_placements.push(placement);
+        println!();
+    }
+}
+
+// ////////////////////////////////
+// Solver
+// ////////////////////////////////
+
+fn solve(grid: &mut Grid, piece_set: &mut PieceSet) {
+    let co = grid.find_first_free_cell();
+    match co {
+        None => {
+            grid.print();
+        }
+        Some(co) => {
+            for k in 0..piece_set.pieces.len() {
+                if piece_set.remaining[k] == false {
+                    continue;
+                }
+                for l in 0..piece_set.pieces[k].poses.len() {
+                    if grid.is_pose_valid(&piece_set.pieces[k].poses[l], &co) {
+                        grid.pose(&piece_set.pieces[k].poses[l], &co, (k + 1) as i8);
+                        piece_set.remaining[k] = false;
+
+                        solve(grid, piece_set);
+
+                        grid.pose(&piece_set.pieces[k].poses[l], &co, 0);
+                        piece_set.remaining[k] = true;
+                    }
+                }
             }
         }
     }
-    return valid_placements;
 }
 
-fn placement_operate(mut placement: [i8; 6], start_cell: i8, operation: (i8, i8)) -> [i8; 6] {
-    for cell in placement.iter_mut() {
-        for _i in 0..operation.0 {
-            *cell = SYM[(*cell + 24) as usize];
-        }
-        for _i in 0..operation.1 {
-            *cell = ROT[(*cell + 24) as usize];
-        }
-        *cell += start_cell;
-    }
-    placement.sort();
-    return placement;
+fn print_solutions(day: Co, month: Co) {
+    let mut piece_set = PieceSet::new();
+    let mut grid = Grid::new(day, month);
+    solve(&mut grid, &mut piece_set);
 }
 
-fn placement_test_on_boad(board: [u8; 49], placement: [i8; 6]) -> bool {
-    return !(placement
-        .iter()
-        .any(|cell| *cell < 0 || *cell > 48 || board[*cell as usize] > 0)
-        || (placement.contains(&20) && placement.contains(&21))
-        || (placement.contains(&27) && placement.contains(&28))
-        || (placement.contains(&34) && placement.contains(&35))
-        || (placement.contains(&41) && placement.contains(&42)));
-}
+fn main() {
+    let day: i8 = std::env::args().nth(1).expect("no day given").trim().parse().expect("unable to parse the day");
+    let month: i8 = std::env::args().nth(2).expect("no month given").trim().parse::<Month>().expect("Unable to parse the month") as i8;
 
-fn pieces_intersect_placement(pieces: &Vec<Piece>, placement: [i8; 6]) -> Vec<Piece> {
-    let mut new_pieces = pieces.clone();
-    for new_piece in new_pieces.iter_mut() {
-        new_piece.placements = new_piece
-            .placements
-            .iter()
-            .filter(|p| !placement_intersect_placement(**p, placement))
-            .cloned()
-            .collect();
-    }
-    return new_pieces;
-}
-
-fn placement_intersect_placement(p1: [i8; 6], p2: [i8; 6]) -> bool {
-    return p1.iter().any(|x| p2.contains(x));
+    print_solutions(Co::from_i8(day + 13), Co::from_i8(month));
 }
