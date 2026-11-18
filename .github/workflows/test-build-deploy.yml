@@ -140,9 +140,6 @@ jobs:
         name: apad-solver-${{ inputs.version }}
         path: bin
 
-    - name: Set execution permission to the solver
-      run: chmod a+x bin/apad-solver
-
     - name: Upload build
       uses: actions/upload-artifact@v7
       with:
@@ -176,7 +173,6 @@ jobs:
         name: build-${{ inputs.version }}
         path: build
 
-
     - name: Deploy on server
       uses: easingthemes/ssh-deploy@main
       with:
@@ -194,6 +190,7 @@ jobs:
         SCRIPT_AFTER: |
           mkdir -p ${{ secrets.SERV_PATH }}/var && chmod 775 ${{ secrets.SERV_PATH }}/var
           touch ${{ secrets.SERV_PATH }}/.env.local.php && chmod 664 ${{ secrets.SERV_PATH }}/.env.local.php
+          chmod ug+x ${{ secrets.SERV_PATH }}/bin/apad-solver
           sudo /usr/bin/docker exec -u php-fpm php-fpm symfony-upgrade-app ${{ secrets.SERV_PATH }} ${{ inputs.environment }}
           sudo /usr/bin/docker exec -u php-fpm php-fpm opcache-clear-app ${{ secrets.SERV_PATH }} ${{ inputs.environment }}
    
