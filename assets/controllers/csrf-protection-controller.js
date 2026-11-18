@@ -27,9 +27,7 @@ document.addEventListener('turbo:submit-end', function (event) {
 });
 
 export function generateCsrfToken(formElement) {
-  const csrfField = formElement.querySelector(
-    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
-  );
+  const csrfField = getCsrfField(formElement);
 
   if (!csrfField) {
     return;
@@ -69,9 +67,7 @@ export function generateCsrfToken(formElement) {
 
 export function generateCsrfHeaders(formElement) {
   const headers = {};
-  const csrfField = formElement.querySelector(
-    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
-  );
+  const csrfField = getCsrfField(formElement);
 
   if (!csrfField) {
     return headers;
@@ -89,9 +85,7 @@ export function generateCsrfHeaders(formElement) {
 }
 
 export function removeCsrfToken(formElement) {
-  const csrfField = formElement.querySelector(
-    'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
-  );
+  const csrfField = getCsrfField(formElement);
 
   if (!csrfField) {
     return;
@@ -113,6 +107,14 @@ export function removeCsrfToken(formElement) {
         ? '__Host-' + cookie + '; secure'
         : cookie;
   }
+}
+
+function getCsrfField(formElement) {
+  return Array.from(formElement.elements).find((field) =>
+    field.matches(
+      'input[data-controller="csrf-protection"], input[name="_csrf_token"]'
+    )
+  );
 }
 
 /* stimulusFetch: 'lazy' */
