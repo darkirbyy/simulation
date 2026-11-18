@@ -108,6 +108,7 @@ $colors: (
 
 .app-home-link {
   filter: brightness(90%);
+  max-width: 320px;
 
   &:hover {
     filter: brightness(110%);
